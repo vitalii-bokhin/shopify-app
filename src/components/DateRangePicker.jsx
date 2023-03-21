@@ -1,5 +1,7 @@
 import { AlphaStack, Box, Button, Columns, DatePicker, Icon, Inline, OptionList, Popover, Scrollable, Select, TextField, useBreakpoints } from '@shopify/polaris';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setDate as setDateStore } from './../app/features/datepickerSlice';
 
 const ShowButton = (props) => {
     return (
@@ -20,8 +22,8 @@ const ShowButton = (props) => {
 }
 
 // This example is for guidance purposes. Copying it will come with caveats.
-function DateRangePicker(props) {
-    // const dateSelectedEvent = new CustomEvent('dateSelected');
+function DateRangePicker() {
+    const dispatch = useDispatch();
     const { mdDown, lgUp } = useBreakpoints();
     const shouldShowMultiMonth = lgUp;
     const today = new Date(new Date().setHours(0, 0, 0, 0));
@@ -53,6 +55,92 @@ function DateRangePicker(props) {
                     new Date(new Date().setDate(today.getDate() - 7)).setHours(0, 0, 0, 0)
                 ),
                 until: yesterday,
+            },
+        },
+        {
+            title: "Last 30 days",
+            alias: "last30days",
+            period: {
+                since: new Date(
+                    new Date(new Date().setDate(today.getDate() - 30)).setHours(0, 0, 0, 0)
+                ),
+                until: yesterday,
+            },
+        },
+        {
+            title: "Last 90 days",
+            alias: "last90days",
+            period: {
+                since: new Date(
+                    new Date(new Date().setDate(today.getDate() - 90)).setHours(0, 0, 0, 0)
+                ),
+                until: yesterday,
+            },
+        },
+        {
+            title: "Last month",
+            alias: "lastMonth",
+            period: {
+                since: new Date(
+                    new Date(today.getFullYear(), today.getMonth() - 1, 1).setHours(0, 0, 0, 0)
+                ),
+                until: new Date(
+                    new Date(today.getFullYear(), today.getMonth(), 0).setHours(0, 0, 0, 0)
+                ),
+            },
+        },
+        {
+            title: "Last year",
+            alias: "lastYear",
+            period: {
+                since: new Date(
+                    new Date(today.getFullYear() - 1, 0, 1).setHours(0, 0, 0, 0)
+                ),
+                until: new Date(
+                    new Date(today.getFullYear(), 0, 0).setHours(0, 0, 0, 0)
+                ),
+            },
+        },
+        {
+            title: "Week to date",
+            alias: "weekToDate",
+            period: {
+                since: new Date((() => {
+                    const day = today.getDay();
+                    const diff = today.getDate() - day + (day == 0 ? -6 : 1);
+                    return new Date(today.getFullYear(), today.getMonth(), diff).setHours(0, 0, 0, 0);
+                })()),
+                until: today,
+            },
+        },
+        {
+            title: "Month to date",
+            alias: "monthToDate",
+            period: {
+                since: new Date(
+                    new Date(today.getFullYear(), today.getMonth(), 1).setHours(0, 0, 0, 0)
+                ),
+                until: today,
+            },
+        },
+        {
+            title: "Quarter to date",
+            alias: "quarterToDate",
+            period: {
+                since: new Date(
+                    new Date(today.getFullYear(), today.getMonth() - 2, 1).setHours(0, 0, 0, 0)
+                ),
+                until: today,
+            },
+        },
+        {
+            title: "Year to date",
+            alias: "yearToDate",
+            period: {
+                since: new Date(
+                    new Date(today.getFullYear(), 0, 1).setHours(0, 0, 0, 0)
+                ),
+                until: today,
             },
         },
     ];
@@ -94,6 +182,12 @@ function DateRangePicker(props) {
         }
         return [year, month, day].join("-");
     }
+
+    const formatDateToString = (date) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    }
+
     function formatDate(date) {
         return formatDateToYearMonthDayDateString(date);
     }
@@ -181,18 +275,24 @@ function DateRangePicker(props) {
     }
     function apply() {
         setPopoverActive(false);
-        // window.dispatchEvent(dateSelectedEvent);
-        props.change();
+
+        dispatch(setDateStore({
+            from: formatDate(activeDateRange.period.since),
+            to: formatDate(activeDateRange.period.until),
+        }));
     }
     function cancel() {
         setPopoverActive(false);
     }
     useEffect(() => {
         if (activeDateRange) {
+            console.log(formatDateToString(activeDateRange.period.since));
+
             setInputValues({
-                since: formatDate(activeDateRange.period.since),
-                until: formatDate(activeDateRange.period.until),
+                since: formatDateToString(activeDateRange.period.since),
+                until: formatDateToString(activeDateRange.period.until),
             });
+
             function monthDiff(referenceDate, newDate) {
                 return (
                     newDate.month -
@@ -246,7 +346,7 @@ function DateRangePicker(props) {
                         md: "max-content max-content",
                     }}
                     gap={0}
-                    // ref={datePickerRef}
+                // ref={datePickerRef}
                 >
                     <Box
                         maxWidth={mdDown ? "516px" : "212px"}
@@ -315,6 +415,7 @@ function DateRangePicker(props) {
                             </Inline>
                             <div>
                                 <DatePicker
+                                    weekStartsOn='1'
                                     month={month}
                                     year={year}
                                     selected={{
@@ -333,7 +434,7 @@ function DateRangePicker(props) {
             </Popover.Pane>
             <Popover.Pane fixed>
                 <Popover.Section>
-                    <Inline align="end">
+                    <Inline align="end" gap="4">
                         <Button onClick={cancel}>Cancel</Button>
                         <Button primary onClick={apply}>
                             Apply
