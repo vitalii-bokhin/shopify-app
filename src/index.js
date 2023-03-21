@@ -29,10 +29,10 @@ datepicker.render(
 
 const firstBlock = ReactDOM.createRoot(document.getElementById('app-first-block'));
 firstBlock.render(
-  <FirstBlock loader={(callback) => {dateChange = callback}} />
+  <AppProvider i18n={enTranslations}>
+    <FirstBlock loader={(callback) => { dateChange = callback }} />
+  </AppProvider>
 );
-
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
