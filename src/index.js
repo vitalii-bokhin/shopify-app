@@ -8,14 +8,14 @@ import reportWebVitals from './reportWebVitals';
 import '@shopify/polaris/build/esm/styles.css';
 import enTranslations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
-import DateRangePicker from './components/DateRangePicker';
 import FirstBlock from './blocks/FirstBlock';
+import TopBar from './blocks/TopBar';
 
-const datepicker = ReactDOM.createRoot(document.getElementById('app-datepicker'));
-datepicker.render(
+const topBar = ReactDOM.createRoot(document.getElementById('app-top-bar'));
+topBar.render(
   <Provider store={store}>
     <AppProvider i18n={enTranslations}>
-      <DateRangePicker />
+      <TopBar />
     </AppProvider>
   </Provider>
 );
@@ -24,7 +24,16 @@ const firstBlock = ReactDOM.createRoot(document.getElementById('app-first-block'
 firstBlock.render(
   <Provider store={store}>
     <AppProvider i18n={enTranslations}>
-      <FirstBlock />
+      <FirstBlock type="sales" />
+    </AppProvider>
+  </Provider>
+);
+
+const secondBlock = ReactDOM.createRoot(document.getElementById('app-second-block'));
+secondBlock.render(
+  <Provider store={store}>
+    <AppProvider i18n={enTranslations}>
+      <FirstBlock type="sessions" />
     </AppProvider>
   </Provider>
 );

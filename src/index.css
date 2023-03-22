@@ -1,3 +1,28 @@
 .Polaris-Frame__Content_xd1mk {
   position: static !important;
 }
+
+.badge {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: #f6f6f7;
+  border-radius: 12px;
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px 0 5px;
+}
+
+.badge_sm {
+  font-size: 12px;
+  height: 16px;
+  border-radius: 8px;
+  padding: 0 8px 0 4px;
+  gap: 4px;
+}
+
+table {
+  font-size: inherit;
+}

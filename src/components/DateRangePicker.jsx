@@ -1,36 +1,71 @@
-import { AlphaStack, Box, Button, Columns, DatePicker, Icon, Inline, OptionList, Popover, Scrollable, Select, TextField, useBreakpoints } from '@shopify/polaris';
+import { AlphaStack, Box, Button, Collapsible, Columns, DatePicker, Icon, Inline, OptionList, Popover, Scrollable, Select, TextField, useBreakpoints } from '@shopify/polaris';
+import { ChevronDownMinor, ChevronUpMinor } from '@shopify/polaris-icons';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setDate as setDateStore } from './../app/features/datepickerSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import formatDateToYearMonthDayDateString from '../app/features/formatDateToYearMonthDayDateString';
+import { setComparison, setComparisonDate, setDate as setDateStore } from './../app/features/datepickerSlice';
 
 const ShowButton = (props) => {
     return (
         <button onClick={props.onClick} className="Polaris-Button_r99lw Polaris-Button--sizeSlim_1p6ue Polaris-Button--fullWidth_zyvh4"
             type="button" tabIndex="0" aria-controls="Polarispopover130" aria-owns="Polarispopover130"
-            aria-expanded="false"><span className="Polaris-Button__Content_xd1mk"><span
-                className="Polaris-Button__Icon_yj27d"><span className="Polaris-Icon_yj27d"><span
-                    className="Polaris-Text--root_yj4ah Polaris-Text--bodySm_nvqxj Polaris-Text--regular_pjgr0 Polaris-Text--visuallyHidden_yrtt6"></span><svg
-                        viewBox="0 0 20 20" className="Polaris-Icon__Svg_375hu" focusable="false"
-                        aria-hidden="true">
-                        <path fillRule="evenodd"
-                            d="M7 2a1 1 0 0 1 1 1v1h4v-1a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h1v-1a1 1 0 0 1 1-1Zm-2 6v7h10v-7h-10Z">
-                        </path>
-                    </svg></span></span><span className="Polaris-Button__Text_yj3uv">{props.text}</span>
+            aria-expanded="false"><span className="Polaris-Button__Content_xd1mk">
+
+                {props.type !== 'comparison' && (
+                    <span className="Polaris-Button__Icon_yj27d">
+                        <span className="Polaris-Icon_yj27d">
+                            <svg viewBox="0 0 20 20" className="Polaris-Icon__Svg_375hu" focusable="false" aria-hidden="true">
+                                <path fillRule="evenodd" d="M7 2a1 1 0 0 1 1 1v1h4v-1a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h1v-1a1 1 0 0 1 1-1Zm-2 6v7h10v-7h-10Z">
+                                </path>
+                            </svg>
+                        </span>
+                    </span>
+                )}
+
+                <span className="Polaris-Button__Text_yj3uv">{props.text}</span>
             </span>
         </button>
     );
 }
 
+const DropDown = (props) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <div className="uBwaV">
+            <div className="fD5Ub">
+                <button className="CC7jr" type="button" onClick={() => setOpen(!open)}>
+                    <span className="BfUwo">{props.button}</span>
+                    <Icon
+                        source={open ? ChevronUpMinor : ChevronDownMinor}
+                        color="base"
+                    />
+                </button>
+            </div>
+            <Collapsible
+                open={open}
+                transition={{ duration: '100ms', timingFunction: 'linear' }}
+                expandOnPrint
+            >
+                {props.children}
+            </Collapsible>
+        </div>
+    );
+}
+
 // This example is for guidance purposes. Copying it will come with caveats.
-function DateRangePicker() {
+function DateRangePicker(props) {
     const dispatch = useDispatch();
+    const date = useSelector((state) => state.datepicker.date);
     const { mdDown, lgUp } = useBreakpoints();
     const shouldShowMultiMonth = lgUp;
     const today = new Date(new Date().setHours(0, 0, 0, 0));
     const yesterday = new Date(
         new Date(new Date().setDate(today.getDate() - 1)).setHours(0, 0, 0, 0)
     );
-    const ranges = [
+    const comparison = props.type == 'comparison';
+
+    const defRanges = [
         {
             title: "Today",
             alias: "today",
@@ -144,12 +179,163 @@ function DateRangePicker() {
             },
         },
     ];
+
+    const comparePrevPeriod = () => {
+        const dFrom = new Date(date.from);
+        const dTo = new Date(date.from);
+
+        switch (date.alias) {
+            case 'today':
+                return {
+                    since: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
+                    ),
+                    until: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
+                    ),
+                };
+
+            case 'last7days':
+                return {
+                    since: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 7).setHours(0, 0, 0, 0)
+                    ),
+                    until: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
+                    ),
+                };
+
+            case 'last30days':
+                return {
+                    since: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 30).setHours(0, 0, 0, 0)
+                    ),
+                    until: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
+                    ),
+                };
+
+            case 'last90days':
+                return {
+                    since: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 90).setHours(0, 0, 0, 0)
+                    ),
+                    until: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
+                    ),
+                };
+
+            case 'lastMonth':
+                return {
+                    since: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth() - 1, 1).setHours(0, 0, 0, 0)
+                    ),
+                    until: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), 0).setHours(0, 0, 0, 0)
+                    ),
+                };
+        }
+    }
+
+    const comparisonRanges = [
+        {
+            title: "No comparison",
+            alias: "noComparison",
+            period: {
+                since: today,
+                until: today,
+            },
+        },
+        {
+            title: "Previous period",
+            alias: "previousPeriod",
+            period: comparePrevPeriod(),
+        },
+        {
+            title: "Previous year",
+            alias: "previousYear",
+            period: comparePrevPeriod(),
+        },
+    ];
+
+    const ranges = comparison ? comparisonRanges : defRanges;
+
+    const quartersRange = ['4th', '3rd', '2nd', '1st'].map((item, i) => {
+        const lastYear = today.getFullYear() - 1;
+        let months = [];
+
+        switch (i) {
+            case 0:
+                months = [9, 11];
+                break;
+
+            case 1:
+                months = [6, 8];
+                break;
+
+            case 2:
+                months = [3, 5];
+                break;
+
+            case 3:
+                months = [0, 2];
+                break;
+        }
+
+        const start = new Date(lastYear, months[0], 1).setHours(0, 0, 0, 0);
+        const end = new Date(lastYear, months[1] + 1, 0).setHours(0, 0, 0, 0);
+
+        return {
+            title: item + ' Quarter (' + lastYear + ')',
+            alias: item + 'Quarter' + lastYear,
+            period: {
+                since: new Date(start),
+                until: new Date(end),
+            },
+        };
+    });
+
+    const blackFridayRange = [2022, 2021, 2020, 2019].map((year) => {
+        let start, end;
+
+        switch (year) {
+            case 2022:
+                start = new Date(year, 10, 25);
+                end = new Date(year, 10, 28);
+                break;
+
+            case 2021:
+                start = new Date(year, 10, 26);
+                end = new Date(year, 10, 29);
+                break;
+
+            case 2020:
+                start = new Date(year, 10, 27);
+                end = new Date(year, 10, 30);
+                break;
+
+            case 2019:
+                start = new Date(year, 10, 29);
+                end = new Date(year, 11, 2);
+                break;
+        }
+
+        return {
+            title: 'BFCM (' + year + ')',
+            alias: 'rangeBFCM' + year,
+            period: {
+                since: new Date(start.setHours(0, 0, 0, 0)),
+                until: new Date(end.setHours(0, 0, 0, 0)),
+            },
+        };
+    });
+
     const [popoverActive, setPopoverActive] = useState(false);
-    const [activeDateRange, setActiveDateRange] = useState(ranges[0]);
+    const [activeDateRange, setActiveDateRange] = useState(comparison ? comparisonRanges[0] : defRanges[2]);
     const [inputValues, setInputValues] = useState({});
     const [{ month, year }, setDate] = useState({
-        month: activeDateRange.period.since.getMonth(),
-        year: activeDateRange.period.since.getFullYear(),
+        month: activeDateRange.period?.since.getMonth(),
+        year: activeDateRange.period?.since.getFullYear(),
     });
     const datePickerRef = useRef(null);
     const VALID_YYYY_MM_DD_DATE_REGEX = /^\d{4}-\d{1,2}-\d{1,2}/;
@@ -170,18 +356,6 @@ function DateRangePicker() {
         const [year, month, day] = input.split("-");
         return new Date(Number(year), Number(month) - 1, Number(day));
     }
-    function formatDateToYearMonthDayDateString(date) {
-        const year = String(date.getFullYear());
-        let month = String(date.getMonth() + 1);
-        let day = String(date.getDate());
-        if (month.length < 2) {
-            month = String(month).padStart(2, "0");
-        }
-        if (day.length < 2) {
-            day = String(day).padStart(2, "0");
-        }
-        return [year, month, day].join("-");
-    }
 
     const formatDateToString = (date) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -191,6 +365,7 @@ function DateRangePicker() {
     function formatDate(date) {
         return formatDateToYearMonthDayDateString(date);
     }
+
     function nodeContainsDescendant(rootNode, descendant) {
         if (rootNode === descendant) {
             return true;
@@ -213,7 +388,7 @@ function DateRangePicker() {
         setInputValues((prevState) => {
             return { ...prevState, since: value };
         });
-        console.log("handleStartInputValueChange, validDate", value);
+
         if (isValidDate(value)) {
             const newSince = parseYearMonthDayDateString(value);
             setActiveDateRange((prevState) => {
@@ -276,18 +451,26 @@ function DateRangePicker() {
     function apply() {
         setPopoverActive(false);
 
-        dispatch(setDateStore({
-            from: formatDate(activeDateRange.period.since),
-            to: formatDate(activeDateRange.period.until),
-        }));
+        if (comparison) {
+            dispatch(setComparisonDate({
+                from: formatDate(activeDateRange.period.since),
+                to: formatDate(activeDateRange.period.until),
+            }));
+
+            dispatch(setComparison(activeDateRange.alias !== 'noComparison'));
+        } else {
+            dispatch(setDateStore({
+                from: formatDate(activeDateRange.period.since),
+                to: formatDate(activeDateRange.period.until),
+                alias: activeDateRange.alias,
+            }));
+        }
     }
     function cancel() {
         setPopoverActive(false);
     }
     useEffect(() => {
-        if (activeDateRange) {
-            console.log(formatDateToString(activeDateRange.period.since));
-
+        if (activeDateRange && activeDateRange.period) {
             setInputValues({
                 since: formatDateToString(activeDateRange.period.since),
                 until: formatDateToString(activeDateRange.period.until),
@@ -315,12 +498,11 @@ function DateRangePicker() {
             }
         }
     }, [activeDateRange]);
-    const buttonValue =
-        activeDateRange.title === "Custom"
-            ? activeDateRange.period.since.toDateString() +
-            " - " +
-            activeDateRange.period.until.toDateString()
-            : activeDateRange.title;
+
+    const buttonValue = activeDateRange.title === "Custom"
+        ? activeDateRange.period.since.toDateString() + " - " + activeDateRange.period.until.toDateString()
+        : activeDateRange.title;
+
     return (
         <Popover
             active={popoverActive}
@@ -334,6 +516,7 @@ function DateRangePicker() {
                 <ShowButton
                     onClick={() => setPopoverActive(!popoverActive)}
                     text={buttonValue}
+                    type={props.type}
                 />
             }
             onClose={() => setPopoverActive(false)}
@@ -381,6 +564,34 @@ function DateRangePicker() {
                                         );
                                     }}
                                 />
+                                <DropDown button="Quarters">
+                                    <OptionList
+                                        options={quartersRange.map((range) => ({
+                                            value: range.alias,
+                                            label: range.title,
+                                        }))}
+                                        selected={activeDateRange.alias}
+                                        onChange={(value) => {
+                                            setActiveDateRange(
+                                                quartersRange.find((range) => range.alias === value[0])
+                                            );
+                                        }}
+                                    />
+                                </DropDown>
+                                <DropDown button="Black Friday Cyber Monday">
+                                    <OptionList
+                                        options={blackFridayRange.map((range) => ({
+                                            value: range.alias,
+                                            label: range.title,
+                                        }))}
+                                        selected={activeDateRange.alias}
+                                        onChange={(value) => {
+                                            setActiveDateRange(
+                                                blackFridayRange.find((range) => range.alias === value[0])
+                                            );
+                                        }}
+                                    />
+                                </DropDown>
                             </Scrollable>
                         )}
                     </Box>
@@ -419,8 +630,8 @@ function DateRangePicker() {
                                     month={month}
                                     year={year}
                                     selected={{
-                                        start: activeDateRange.period.since,
-                                        end: activeDateRange.period.until,
+                                        start: activeDateRange.period?.since,
+                                        end: activeDateRange.period?.until,
                                     }}
                                     onMonthChange={handleMonthChange}
                                     onChange={handleCalendarChange}
