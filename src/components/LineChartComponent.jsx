@@ -1,8 +1,6 @@
 import { LineChart } from '@shopify/polaris-viz';
-import { useSelector } from 'react-redux';
 
 function LineChartComponent(props) {
-    const isComparison = useSelector((state) => state.datepicker.isComparison);
     const data = [];
     let prefix = '';
 
@@ -55,7 +53,7 @@ function LineChartComponent(props) {
         data: chartItems(props.data),
     });
 
-    if (isComparison && props.compareData && props.compareData.length) {
+    if (props.compareData && props.compareData.length) {
         data.push({
             name: name(props.comparePeriod),
             data: chartItems(props.compareData),
