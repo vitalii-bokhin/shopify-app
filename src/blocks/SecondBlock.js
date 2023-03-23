@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import formatDateToString from '../app/features/formatDateToString';
 import { useGetDataQuery } from '../app/services/userApi';
 
-function FirstBlock(props) {
+export default function SecondBlock(props) {
     const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
     const isComparison = useSelector((state) => state.datepicker.isComparison);
@@ -31,7 +31,7 @@ function FirstBlock(props) {
             .map((item) => {
                 return {
                     key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.sales,
+                    value: item.sessions,
                     ...item,
                 };
             });
@@ -49,7 +49,7 @@ function FirstBlock(props) {
             .map((item) => {
                 return {
                     key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.sales,
+                    value: item.sessions,
                     ...item,
                 };
             });
@@ -59,13 +59,21 @@ function FirstBlock(props) {
     let compareTotal = 0;
     let totalDiff = null;
     let totalTableDiff = null;
+    let totalFormat = '';
+    let totalTableFormat = null;
     let totalTable = '';
     let compareTotalTable = '';
+    const titles = {};
 
-    total = resultData.reduce((acc, item) => acc + item.sales, 0);
-    totalTable = total;
-    compareTotal = compareResultData.reduce((acc, item) => acc + item.sales, 0);
-    compareTotalTable = compareTotal;
+    titles.chart = 'Sessions over time';
+    titles.table = 'Visitors';
+    titles.currency = '';
+    total = resultData.reduce((acc, item) => acc + item.sessions, 0);
+    totalFormat = total;
+    compareTotal = compareResultData.reduce((acc, item) => acc + item.sessions, 0);
+    totalTable = resultData.reduce((acc, item) => acc + item.visitors, 0);
+    totalTableFormat = totalTable;
+    compareTotalTable = compareResultData.reduce((acc, item) => acc + item.visitors, 0);
 
     if (compareTotal && total) {
         totalDiff = (total - compareTotal) / (total / 100);
@@ -77,20 +85,18 @@ function FirstBlock(props) {
 
     return props.children({
         isLoading: isLoading,
-        total: total.toFixed(2),
-        totalPrefix: '$',
+        total: totalFormat,
+        totalPrefix: titles.currency,
         totalDiff: totalDiff,
-        totalTableTitle: 'Online Store',
-        totalTable: total.toFixed(2),
-        totalTablePrefix: '$',
+        totalTableTitle: titles.table,
+        totalTable: totalTableFormat,
+        totalTablePrefix: titles.currency,
         totalTableDiff: totalTableDiff,
-        chartTitle: 'Sales over time',
+        chartTitle: titles.chart,
         chartData: resultData,
         chartComparisonData: compareResultData,
         mainPeriod: mainPeriod,
         comparisonPeriod: comparativePeriod,
-        chartPrefix: '$',
+        chartPrefix: '',
     });
 }
-
-export default FirstBlock;

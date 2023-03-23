@@ -103,7 +103,7 @@ export default function ChartBlockComponent(props) {
                     compareData={props.chartComparisonData}
                     period={props.mainPeriod}
                     comparePeriod={props.comparisonPeriod}
-                    type={props.type}
+                    prefix={props.chartPrefix}
                 />
             </div>
         </div >

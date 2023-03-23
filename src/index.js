@@ -9,6 +9,7 @@ import '@shopify/polaris/build/esm/styles.css';
 import enTranslations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import FirstBlock from './blocks/FirstBlock';
+import SecondBlock from './blocks/SecondBlock';
 import TopBar from './blocks/TopBar';
 import ChartBlockComponent from './components/ChartBlockComponent';
 
@@ -28,6 +29,17 @@ firstBlock.render(
             <FirstBlock type="sales">
                 {(props) => <ChartBlockComponent {...props} />}
             </FirstBlock>
+        </AppProvider>
+    </Provider>
+);
+
+const secondBlock = ReactDOM.createRoot(document.getElementById('app-second-block'));
+secondBlock.render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <SecondBlock type="sessions">
+                {(props) => <ChartBlockComponent {...props} />}
+            </SecondBlock>
         </AppProvider>
     </Provider>
 );

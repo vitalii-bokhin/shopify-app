@@ -1,20 +1,9 @@
 import { LineChart } from '@shopify/polaris-viz';
+import formatDateToString from '../app/features/formatDateToString';
 
-function LineChartComponent(props) {
+export default function LineChartComponent(props) {
     const data = [];
-    let prefix = '';
-
-    switch (props.type) {
-        case 'sales':
-            prefix = '$';
-            break;
-    }
-
-    const formatDateToString = (date) => {
-        date = new Date(date);
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
-    }
+    let prefix = props.prefix;
 
     const name = (period) => {
         const dateFrom = new Date(period.from).setHours(0, 0, 0, 0);
@@ -27,36 +16,15 @@ function LineChartComponent(props) {
         }
     }
 
-    const chartItems = (data) => {
-        return data.map((item) => {
-            let value = 0;
-
-            switch (props.type) {
-                case 'sales':
-                    value = item.sales;
-                    break;
-
-                case 'sessions':
-                    value = item.sessions;
-                    break;
-            }
-
-            return {
-                value,
-                key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-            };
-        });
-    }
-
     data.push({
         name: name(props.period),
-        data: chartItems(props.data),
+        data: props.data,
     });
 
     if (props.compareData && props.compareData.length) {
         data.push({
             name: name(props.comparePeriod),
-            data: chartItems(props.compareData),
+            data: props.compareData,
             isComparison: true,
         });
     }
@@ -94,5 +62,3 @@ function LineChartComponent(props) {
         </div>
     );
 }
-
-export default LineChartComponent;

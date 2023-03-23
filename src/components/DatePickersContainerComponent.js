@@ -302,6 +302,71 @@ const comparePrevPeriod = (date) => {
                     new Date(dTo.getFullYear(), dTo.getMonth() - 1, dTo.getDate()).setHours(0, 0, 0, 0)
                 ),
             };
+
+        case 'quarterToDate':
+            return {
+                from: new Date(
+                    new Date(dFrom.getFullYear(), dFrom.getMonth() - 3, 1).setHours(0, 0, 0, 0)
+                ),
+                to: new Date(
+                    new Date(dTo.getFullYear(), dTo.getMonth() - 3, dTo.getDate()).setHours(0, 0, 0, 0)
+                ),
+            };
+
+        case 'yearToDate':
+            return {
+                from: new Date(
+                    new Date(dFrom.getFullYear() - 1, 0, 1).setHours(0, 0, 0, 0)
+                ),
+                to: new Date(
+                    new Date(dTo.getFullYear() - 1, dTo.getMonth(), dTo.getDate()).setHours(0, 0, 0, 0)
+                ),
+            };
+    }
+
+    if (date.alias.includes('Quarter')) {
+        const ind = date.alias[0];
+        const lastYear = dTo.getFullYear() - 1;
+        let months = [];
+
+        switch (ind - 1) {
+            case 4:
+                months = [9, 11];
+                break;
+
+            case 3:
+                months = [6, 8];
+                break;
+
+            case 2:
+                months = [3, 5];
+                break;
+
+            case 1:
+                months = [0, 2];
+                break;
+        }
+
+        const start = new Date(lastYear, months[0], 1).setHours(0, 0, 0, 0);
+        const end = new Date(lastYear, months[1] + 1, 0).setHours(0, 0, 0, 0);
+
+        return {
+            from: new Date(start),
+            to: new Date(end),
+        };
+    }
+
+    if (date.alias.includes('BFCM')) {
+        const diff = dTo.getDate() - dFrom.getDate();
+
+        return {
+            from: new Date(
+                new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1 - diff).setHours(0, 0, 0, 0)
+            ),
+            to: new Date(
+                new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
+            ),
+        };
     }
 }
 
