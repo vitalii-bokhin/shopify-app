@@ -22,7 +22,7 @@ const getRandomInt = (max) => {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-for (let i = 0; i < 720; i++) {
+for (let i = 0; i < 1024; i++) {
     data.push({
         "cart": getRandomInt(30),
         "checkout": getRandomInt(50),

@@ -269,6 +269,39 @@ const comparePrevPeriod = (date) => {
                     new Date(dFrom.getFullYear(), dFrom.getMonth(), 0).setHours(0, 0, 0, 0)
                 ),
             };
+
+        case 'lastYear':
+            return {
+                from: new Date(
+                    new Date(dFrom.getFullYear() - 1, 0, 1).setHours(0, 0, 0, 0)
+                ),
+                to: new Date(
+                    new Date(dFrom.getFullYear(), 0, 0).setHours(0, 0, 0, 0)
+                ),
+            };
+
+        case 'weekToDate':
+            return {
+                from: new Date((() => {
+                    const date = new Date(dTo.getFullYear(), dTo.getMonth(), dTo.getDate() - 7);
+                    const day = date.getDay();
+                    const diff = date.getDate() - day + (day == 0 ? -6 : 1);
+                    return new Date(date.getFullYear(), date.getMonth(), diff).setHours(0, 0, 0, 0);
+                })()),
+                to: new Date(
+                    new Date(dTo.getFullYear(), dTo.getMonth(), dTo.getDate() - 7).setHours(0, 0, 0, 0)
+                ),
+            };
+
+        case 'monthToDate':
+            return {
+                from: new Date(
+                    new Date(dTo.getFullYear(), dTo.getMonth() - 1, 1).setHours(0, 0, 0, 0)
+                ),
+                to: new Date(
+                    new Date(dTo.getFullYear(), dTo.getMonth() - 1, dTo.getDate()).setHours(0, 0, 0, 0)
+                ),
+            };
     }
 }
 
@@ -277,6 +310,19 @@ export default function DatePickersContainerComponent(props) {
     const activeComparativeRange = useSelector((state) => state.datepicker.comparativeRange);
     const dispatch = useDispatch();
 
+    const setComparativeRange = (rangeState) => {
+        const range = JSON.parse(JSON.stringify(rangeState));
+
+        range.period.from = formatDateToYearMonthDayDateString(new Date(rangeState.period.from));
+        range.period.to = formatDateToYearMonthDayDateString(new Date(rangeState.period.to));
+
+        if (rangeState.alias !== 'noComparison' && !rangeState.title.includes('Compare:')) {
+            range.title = 'Compare: ' + rangeState.title;
+        }
+
+        dispatch(datepickerActions.setComparativeRange(range));
+    }
+
     const setMainRange = (rangeState) => {
         const range = JSON.parse(JSON.stringify(rangeState));
 
@@ -284,19 +330,14 @@ export default function DatePickersContainerComponent(props) {
         range.period.to = formatDateToYearMonthDayDateString(new Date(rangeState.period.to));
 
         dispatch(datepickerActions.setMainRange(range));
-    }
 
-    const setComparativeRange = (rangeState) => {
-        const range = JSON.parse(JSON.stringify(rangeState));
+        if (activeComparativeRange.alias !== 'noComparison') {
+            const compRange = JSON.parse(JSON.stringify(activeComparativeRange));
 
-        range.period.from = formatDateToYearMonthDayDateString(new Date(rangeState.period.from));
-        range.period.to = formatDateToYearMonthDayDateString(new Date(rangeState.period.to));
+            compRange.period = comparePrevPeriod(range);
 
-        if (rangeState.alias !== 'noComparison') {
-            range.title = 'Compare: ' + rangeState.title;
+            setComparativeRange(compRange);
         }
-
-        dispatch(datepickerActions.setComparativeRange(range));
     }
 
     comparativeRanges.forEach((range, i) => {
