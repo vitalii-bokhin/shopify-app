@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import formatDateToString from '../app/features/formatDateToString';
 import { useGetDataQuery } from '../app/services/userApi';
-import ChartBlockComponent from '../components/ChartBlockComponent';
 
-export default function SecondBlock(props) {
+export default function ThirdBlock(props) {
     const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
     const isComparison = useSelector((state) => state.datepicker.isComparison);
@@ -56,50 +55,32 @@ export default function SecondBlock(props) {
             });
     }
 
-    let total = 0;
-    let compareTotal = 0;
-    let totalDiff = null;
-    let totalTableDiff = null;
-    let totalFormat = '';
-    let totalTableFormat = null;
-    let totalTable = '';
-    let compareTotalTable = '';
-    const titles = {};
+    let total = resultData.reduce((acc, item) => acc + item.return_customer_rate, 0);
+    let totalFormat = (total / resultData.length).toFixed(2) + '%';
 
-    titles.chart = 'Sessions over time';
-    titles.table = 'Visitors';
-    titles.currency = '';
-    total = resultData.reduce((acc, item) => acc + item.sessions, 0);
-    totalFormat = total;
-    compareTotal = compareResultData.reduce((acc, item) => acc + item.sessions, 0);
-    totalTable = resultData.reduce((acc, item) => acc + item.visitors, 0);
-    totalTableFormat = totalTable;
-    compareTotalTable = compareResultData.reduce((acc, item) => acc + item.visitors, 0);
+    let compareTotal = compareResultData.reduce((acc, item) => acc + item.return_customer_rate, 0);
+    compareTotal = compareTotal / compareResultData.length;
+
+    let totalDiff = null;
 
     if (compareTotal && total) {
         totalDiff = (total - compareTotal) / (total / 100);
     }
 
-    if (compareTotalTable && totalTable) {
-        totalTableDiff = (totalTable - compareTotalTable) / (totalTable / 100);
-    }
-
-    const resProps = {
+    return props.children({
         isLoading: isLoading,
         total: totalFormat,
-        totalPrefix: titles.currency,
+        totalPrefix: '',
         totalDiff: totalDiff,
-        totalTableTitle: titles.table,
-        totalTable: totalTableFormat,
-        totalTablePrefix: titles.currency,
-        totalTableDiff: totalTableDiff,
-        chartTitle: titles.chart,
+        totalTableTitle: '',
+        totalTable: '',
+        totalTablePrefix: '',
+        totalTableDiff: '',
+        chartTitle: 'Customers Over Time',
         chartData: resultData,
         chartComparisonData: compareResultData,
         mainPeriod: mainPeriod,
         comparisonPeriod: comparativePeriod,
         chartPrefix: '',
-    };
-
-    return <ChartBlockComponent {...resProps} />;
+    });
 }

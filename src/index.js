@@ -10,11 +10,23 @@ import enTranslations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import FirstBlock from './blocks/FirstBlock';
 import SecondBlock from './blocks/SecondBlock';
+import ThirdBlock from './blocks/ThirdBlock';
 import TopBar from './blocks/TopBar';
 import ChartBlockComponent from './components/ChartBlockComponent';
+import CohortBlock from './blocks/CohortBlock';
+import TopProductsBlock from './blocks/TopProductsBlock';
+import SessionsBlock from './blocks/SessionsByLocationBlock';
+import SimpleTableComponent from './components/SimpleTableComponent';
+import SessionsByLocationBlock from './blocks/SessionsByLocationBlock';
+import SessionsByDeviceBlock from './blocks/SessionsByDeviceBlock';
+import SessionsByTrafficBlock from './blocks/SessionsByTrafficBlock';
+import SessionsBySocialBlock from './blocks/SessionsBySocialBlock';
+import SalesBySocialBlock from './blocks/SalesBySocialBlock';
+import SalesByTrafficSourceBlock from './blocks/SalesByTrafficSourceBlock';
+import TopReferrersBySessionsBlock from './blocks/TopReferrersBySessionsBlock';
+import TopLandingsBySessionsBlock from './blocks/TopLandingsBySessionsBlock';
 
-const topBar = ReactDOM.createRoot(document.getElementById('app-top-bar'));
-topBar.render(
+ReactDOM.createRoot(document.getElementById('app-top-bar')).render(
     <Provider store={store}>
         <AppProvider i18n={enTranslations}>
             <TopBar />
@@ -22,24 +34,108 @@ topBar.render(
     </Provider>
 );
 
-const firstBlock = ReactDOM.createRoot(document.getElementById('app-first-block'));
-firstBlock.render(
+ReactDOM.createRoot(document.getElementById('app-first-block')).render(
     <Provider store={store}>
         <AppProvider i18n={enTranslations}>
-            <FirstBlock type="sales">
-                {(props) => <ChartBlockComponent {...props} />}
-            </FirstBlock>
+            <FirstBlock type="sales" />
         </AppProvider>
     </Provider>
 );
 
-const secondBlock = ReactDOM.createRoot(document.getElementById('app-second-block'));
-secondBlock.render(
+ReactDOM.createRoot(document.getElementById('app-second-block')).render(
     <Provider store={store}>
         <AppProvider i18n={enTranslations}>
-            <SecondBlock type="sessions">
+            <SecondBlock type="sessions" />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-third-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <ThirdBlock type="return_customer_rate">
                 {(props) => <ChartBlockComponent {...props} />}
-            </SecondBlock>
+            </ThirdBlock>
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-cohort-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <CohortBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-top-products-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <TopProductsBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-sessions-loc-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <SessionsByLocationBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-sessions-device-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <SessionsByDeviceBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-sessions-traffic-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <SessionsByTrafficBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-sessions-social-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <SessionsBySocialBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-sales-social-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <SalesBySocialBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-sales-traffic-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <SalesByTrafficSourceBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-top-referrers-sessions-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <TopReferrersBySessionsBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-top-landings-sessions-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <TopLandingsBySessionsBlock />
         </AppProvider>
     </Provider>
 );

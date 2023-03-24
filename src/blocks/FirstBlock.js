@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import formatDateToString from '../app/features/formatDateToString';
 import { useGetDataQuery } from '../app/services/userApi';
+import ChartBlockComponent from '../components/ChartBlockComponent';
 
-function FirstBlock(props) {
+export default function FirstBlock(props) {
     const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
     const isComparison = useSelector((state) => state.datepicker.isComparison);
@@ -75,7 +76,7 @@ function FirstBlock(props) {
         totalTableDiff = (totalTable - compareTotalTable) / (totalTable / 100);
     }
 
-    return props.children({
+    const resProps = {
         isLoading: isLoading,
         total: total.toFixed(2),
         totalPrefix: '$',
@@ -90,7 +91,7 @@ function FirstBlock(props) {
         mainPeriod: mainPeriod,
         comparisonPeriod: comparativePeriod,
         chartPrefix: '$',
-    });
-}
+    };
 
-export default FirstBlock;
+    return <ChartBlockComponent {...resProps} />;
+}
