@@ -25,6 +25,7 @@ import SalesBySocialBlock from './blocks/SalesBySocialBlock';
 import SalesByTrafficSourceBlock from './blocks/SalesByTrafficSourceBlock';
 import TopReferrersBySessionsBlock from './blocks/TopReferrersBySessionsBlock';
 import TopLandingsBySessionsBlock from './blocks/TopLandingsBySessionsBlock';
+import ConversionRateBlock from './blocks/ConversionRateBlock';
 
 ReactDOM.createRoot(document.getElementById('app-top-bar')).render(
     <Provider store={store}>
@@ -53,9 +54,7 @@ ReactDOM.createRoot(document.getElementById('app-second-block')).render(
 ReactDOM.createRoot(document.getElementById('app-third-block')).render(
     <Provider store={store}>
         <AppProvider i18n={enTranslations}>
-            <ThirdBlock type="return_customer_rate">
-                {(props) => <ChartBlockComponent {...props} />}
-            </ThirdBlock>
+            <ThirdBlock type="return_customer_rate" />
         </AppProvider>
     </Provider>
 );
@@ -136,6 +135,14 @@ ReactDOM.createRoot(document.getElementById('app-top-landings-sessions-block')).
     <Provider store={store}>
         <AppProvider i18n={enTranslations}>
             <TopLandingsBySessionsBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-conversion-rate-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <ConversionRateBlock />
         </AppProvider>
     </Provider>
 );

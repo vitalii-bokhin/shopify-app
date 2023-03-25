@@ -1,5 +1,6 @@
-import LineChartComponent from './LineChartComponent';
 import Loader from './Loader';
+import LineChartComponent from './LineChartComponent';
+import StackedChartComponent from './StackedChartComponent';
 
 export default function ChartBlockComponent(props) {
     return props.isLoading ? <Loader /> : (
@@ -98,14 +99,23 @@ export default function ChartBlockComponent(props) {
                 </button></div>
             </div>
             <div className="Polaris-LegacyStack__Item_yiyol">
-                <LineChartComponent
-                    data={props.chartData}
-                    compareData={props.chartComparisonData}
-                    period={props.mainPeriod}
-                    comparePeriod={props.comparisonPeriod}
-                    prefix={props.chartPrefix}
-                />
+                {props.type === 'return_customer_rate' && (
+                    <StackedChartComponent
+                        firstData={props.firstChartData}
+                        secondData={props.secondChartData}
+                        prefix={props.chartPrefix}
+                    />
+                )}
+                {props.type !== 'return_customer_rate' && (
+                    <LineChartComponent
+                        data={props.chartData}
+                        compareData={props.chartComparisonData}
+                        period={props.mainPeriod}
+                        comparePeriod={props.comparisonPeriod}
+                        prefix={props.chartPrefix}
+                    />
+                )}
             </div>
-        </div >
+        </div>
     );
 };

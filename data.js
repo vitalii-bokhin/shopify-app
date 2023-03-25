@@ -32,7 +32,7 @@ for (let i = 0; i < 1024; i++) {
         "return_customer_rate": getRandomInt(700) / 100,
         "sales": getRandomInt(50000) / 100,
         "sessions": getRandomInt(1000),
-        "visitors": getRandomInt(800)
+        "visitors": getRandomInt(800),
     });
 
     date.setDate(date.getDate() - 1);

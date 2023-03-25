@@ -7,18 +7,18 @@ import ChartBlockComponent from '../components/ChartBlockComponent';
 export default function SecondBlock(props) {
     const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
-    const isComparison = useSelector((state) => state.datepicker.isComparison);
-    const { data, error, isLoading } = useGetDataQuery();
-    const [dataFetching, dataFetchingState] = useState(false);
-    let resultData = [];
-    let compareResultData = [];
+    const { data, isLoading } = useGetDataQuery();
+    const [dataFetching, dataFetchingState] = useState(true);
 
     useEffect(() => {
         dataFetchingState(true);
         setTimeout(() => {
             dataFetchingState(false);
         }, 2000);
-    }, [mainPeriod]);
+    }, [mainPeriod, comparativePeriod]);
+    
+    let resultData = [];
+    let compareResultData = [];
 
     if (data) {
         resultData = data
@@ -85,7 +85,7 @@ export default function SecondBlock(props) {
     }
 
     const resProps = {
-        isLoading: isLoading,
+        isLoading: isLoading || dataFetching,
         total: totalFormat,
         totalPrefix: titles.currency,
         totalDiff: totalDiff,
