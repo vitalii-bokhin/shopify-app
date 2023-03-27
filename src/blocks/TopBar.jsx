@@ -1,11 +1,11 @@
 import DatePickersContainerComponent from '../components/DatePickersContainerComponent';
-import DateRangePicker from '../components/DateRangePicker';
 
-function TopBar() {
+export default function TopBar() {
     return (
-        <>
+        <div className="zj7a3">
+
             <DatePickersContainerComponent />
-            
+
             <div className="bNYh2"><label className="Polaris-Choice_j5gzq Polaris-Choice--disabled_hcuh9"
                 htmlFor="PolarisCheckbox1"><span className="Polaris-Choice__Control_1u8vs"><span
                     className="Polaris-Checkbox_1d6zr"><input id="PolarisCheckbox1" type="checkbox" disabled=""
@@ -31,8 +31,6 @@ function TopBar() {
                                 </span>
                 </span>
             </div>
-        </>
+        </div>
     );
 }
-
-export default TopBar;
