@@ -26,6 +26,9 @@ import SalesByTrafficSourceBlock from './blocks/SalesByTrafficSourceBlock';
 import TopReferrersBySessionsBlock from './blocks/TopReferrersBySessionsBlock';
 import TopLandingsBySessionsBlock from './blocks/TopLandingsBySessionsBlock';
 import ConversionRateBlock from './blocks/ConversionRateBlock';
+import TotalOrdersBlock from './blocks/TotalOrdersBlock';
+import AverageOrderBlock from './blocks/AverageOrderBlock';
+import SalesToMarketBlock from './blocks/SalesToMarketBlock';
 
 ReactDOM.createRoot(document.getElementById('app-top-bar')).render(
     <Provider store={store}>
@@ -147,14 +150,29 @@ ReactDOM.createRoot(document.getElementById('app-conversion-rate-block')).render
     </Provider>
 );
 
-// const secondBlock = ReactDOM.createRoot(document.getElementById('app-second-block'));
-// secondBlock.render(
-//     <Provider store={store}>
-//         <AppProvider i18n={enTranslations}>
-//             <FirstBlock type="sessions" />
-//         </AppProvider>
-//     </Provider>
-// );
+ReactDOM.createRoot(document.getElementById('app-orders-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <TotalOrdersBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-average-order-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <AverageOrderBlock />
+        </AppProvider>
+    </Provider>
+);
+
+ReactDOM.createRoot(document.getElementById('app-sales-to-marketing-block')).render(
+    <Provider store={store}>
+        <AppProvider i18n={enTranslations}>
+            <SalesToMarketBlock />
+        </AppProvider>
+    </Provider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

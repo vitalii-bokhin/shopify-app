@@ -370,7 +370,21 @@ const comparePrevPeriod = (date) => {
     }
 }
 
-export default function DatePickersContainerComponent(props) {
+const comparePrevYear = (date) => {
+    const dFrom = new Date(date.period.from);
+    const dTo = new Date(date.period.to);
+
+    return {
+        from: new Date(
+            new Date(dFrom.getFullYear() - 1, dFrom.getMonth(), dFrom.getDate()).setHours(0, 0, 0, 0)
+        ),
+        to: new Date(
+            new Date(dTo.getFullYear() - 1, dTo.getMonth(), dTo.getDate()).setHours(0, 0, 0, 0)
+        ),
+    };
+}
+
+export default function DatePickersContainerComponent() {
     const activeMainRange = useSelector((state) => state.datepicker.mainRange);
     const activeComparativeRange = useSelector((state) => state.datepicker.comparativeRange);
     const dispatch = useDispatch();
@@ -409,6 +423,10 @@ export default function DatePickersContainerComponent(props) {
         switch (range.alias) {
             case 'previousPeriod':
                 comparativeRanges[i].period = comparePrevPeriod(activeMainRange);
+                break;
+
+            case 'previousYear':
+                comparativeRanges[i].period = comparePrevYear(activeMainRange);
                 break;
         }
     });

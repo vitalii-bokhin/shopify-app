@@ -1,12 +1,28 @@
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import randomInt from '../app/features/randomInt';
+import ContentLoader from '../components/ContentLoader';
+
 export default function CohortBlock() {
+    const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
+    const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
+    const [dataFetching, dataFetchingState] = useState(true);
+
+    useEffect(() => {
+        dataFetchingState(true);
+        setTimeout(() => {
+            dataFetchingState(false);
+        }, 2000);
+    }, [mainPeriod, comparativePeriod]);
+
     const data = {};
-    data.all = ['100', '75', '20'];
-    data.sep = ['100', '70', '0'];
-    data.oct = ['100', '80', '10'];
-    data.nov = ['100', '60', '0'];
-    data.dec = ['100', '80', '0'];
-    data.jan = ['100', '85', '0'];
-    data.feb = ['100', '70', '0'];
+    data.all = ['100', randomInt(0, 100), randomInt(0, 100)];
+    data.sep = ['100', randomInt(0, 100), randomInt(0, 100)];
+    data.oct = ['100', randomInt(0, 100), randomInt(0, 100)];
+    data.nov = ['100', randomInt(0, 100), randomInt(0, 100)];
+    data.dec = ['100', randomInt(0, 100), randomInt(0, 100)];
+    data.jan = ['100', randomInt(0, 100), randomInt(0, 100)];
+    data.feb = ['100', randomInt(0, 100), randomInt(0, 100)];
 
     for (const key in data) {
         if (Object.hasOwnProperty.call(data, key)) {
@@ -17,7 +33,7 @@ export default function CohortBlock() {
 
     const { all, sep, oct, nov, dec, jan, feb } = data;
 
-    return (
+    return dataFetching ? <ContentLoader /> :  (
         <div dangerouslySetInnerHTML={{
             __html: `<div class="Polaris-AlphaStack_1x5dy"
             style="--pc-stack-inline-align:start; --pc-stack-order:column; --pc-stack-gap-xs:var(--p-space-4);">

@@ -4,7 +4,7 @@ import formatDateToString from '../app/features/formatDateToString';
 import { useGetDataQuery } from '../app/services/userApi';
 import ChartBlockComponent from '../components/ChartBlockComponent';
 
-export default function ThirdBlock(props) {
+export default function SalesToMarketBlock() {
     const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
     const { data, isLoading } = useGetDataQuery();
@@ -19,7 +19,6 @@ export default function ThirdBlock(props) {
 
     let resultData = [];
     let compareResultData = [];
-    let resultSecondData = [];
 
     if (data) {
         resultData = data
@@ -33,23 +32,7 @@ export default function ThirdBlock(props) {
             .map((item) => {
                 return {
                     key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.first_time,
-                    ...item,
-                };
-            });
-
-        resultSecondData = data
-            .filter((item) => {
-                const itemDate = new Date(item.date).setHours(0, 0, 0, 0);
-                const dateFrom = new Date(mainPeriod.from).setHours(0, 0, 0, 0);
-                const dateTo = new Date(mainPeriod.to).setHours(0, 0, 0, 0);
-
-                return dateFrom <= itemDate && itemDate <= dateTo;
-            })
-            .map((item) => {
-                return {
-                    key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: Math.round((item.first_time / 100) * item.return_customer_rate),
+                    value: item.sales_to_market,
                     ...item,
                 };
             });
@@ -67,19 +50,18 @@ export default function ThirdBlock(props) {
             .map((item) => {
                 return {
                     key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.orders,
+                    value: item.sales_to_market,
                     ...item,
                 };
             });
     }
 
-    let total = resultData.reduce((acc, item) => acc + item.return_customer_rate, 0);
-    let totalFormat = (total / resultData.length).toFixed(2) + '%';
-
-    let compareTotal = compareResultData.reduce((acc, item) => acc + item.return_customer_rate, 0);
-    compareTotal = compareTotal / compareResultData.length;
-
+    let total = 0;
+    let compareTotal = 0;
     let totalDiff = null;
+
+    total = resultData.reduce((acc, item) => acc + item.sales_to_market, 0);
+    compareTotal = compareResultData.reduce((acc, item) => acc + item.sales_to_market, 0);
 
     if (compareTotal && total) {
         totalDiff = (total - compareTotal) / (total / 100);
@@ -87,21 +69,20 @@ export default function ThirdBlock(props) {
 
     const resProps = {
         isLoading: isLoading || dataFetching,
-        total: totalFormat,
-        totalPrefix: '',
+        total: total.toFixed(2),
+        totalPrefix: '$',
         totalDiff: totalDiff,
         totalTableTitle: '',
         totalTable: '',
         totalTablePrefix: '',
         totalTableDiff: '',
-        chartTitle: 'Customers Over Time',
+        chartTitle: 'Total sales over time',
+        chartData: resultData,
+        chartComparisonData: compareResultData,
         mainPeriod: mainPeriod,
         comparisonPeriod: comparativePeriod,
-        chartPrefix: '',
-        firstChartData: resultData,
-        secondChartData: resultSecondData,
-        type: props.type,
+        chartPrefix: '$',
     };
 
     return <ChartBlockComponent {...resProps} />;
-}
+};

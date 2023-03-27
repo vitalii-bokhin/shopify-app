@@ -4,7 +4,7 @@ import formatDateToString from '../app/features/formatDateToString';
 import { useGetDataQuery } from '../app/services/userApi';
 import ChartBlockComponent from '../components/ChartBlockComponent';
 
-export default function ThirdBlock(props) {
+export default function TotalOrdersBlock() {
     const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
     const { data, isLoading } = useGetDataQuery();
@@ -19,7 +19,6 @@ export default function ThirdBlock(props) {
 
     let resultData = [];
     let compareResultData = [];
-    let resultSecondData = [];
 
     if (data) {
         resultData = data
@@ -33,23 +32,7 @@ export default function ThirdBlock(props) {
             .map((item) => {
                 return {
                     key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.first_time,
-                    ...item,
-                };
-            });
-
-        resultSecondData = data
-            .filter((item) => {
-                const itemDate = new Date(item.date).setHours(0, 0, 0, 0);
-                const dateFrom = new Date(mainPeriod.from).setHours(0, 0, 0, 0);
-                const dateTo = new Date(mainPeriod.to).setHours(0, 0, 0, 0);
-
-                return dateFrom <= itemDate && itemDate <= dateTo;
-            })
-            .map((item) => {
-                return {
-                    key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: Math.round((item.first_time / 100) * item.return_customer_rate),
+                    value: item.orders,
                     ...item,
                 };
             });
@@ -73,35 +56,42 @@ export default function ThirdBlock(props) {
             });
     }
 
-    let total = resultData.reduce((acc, item) => acc + item.return_customer_rate, 0);
-    let totalFormat = (total / resultData.length).toFixed(2) + '%';
-
-    let compareTotal = compareResultData.reduce((acc, item) => acc + item.return_customer_rate, 0);
-    compareTotal = compareTotal / compareResultData.length;
-
+    let total = 0;
+    let compareTotal = 0;
     let totalDiff = null;
+    let totalTableDiff = null;
+    let totalTable = '';
+    let compareTotalTable = '';
+
+    total = resultData.reduce((acc, item) => acc + item.orders, 0);
+    totalTable = total;
+    compareTotal = compareResultData.reduce((acc, item) => acc + item.orders, 0);
+    compareTotalTable = compareTotal;
 
     if (compareTotal && total) {
         totalDiff = (total - compareTotal) / (total / 100);
     }
 
+    if (compareTotalTable && totalTable) {
+        totalTableDiff = (totalTable - compareTotalTable) / (totalTable / 100);
+    }
+
     const resProps = {
         isLoading: isLoading || dataFetching,
-        total: totalFormat,
+        total: total,
         totalPrefix: '',
         totalDiff: totalDiff,
         totalTableTitle: '',
         totalTable: '',
         totalTablePrefix: '',
         totalTableDiff: '',
-        chartTitle: 'Customers Over Time',
+        chartTitle: 'Orders over time',
+        chartData: resultData,
+        chartComparisonData: compareResultData,
         mainPeriod: mainPeriod,
         comparisonPeriod: comparativePeriod,
         chartPrefix: '',
-        firstChartData: resultData,
-        secondChartData: resultSecondData,
-        type: props.type,
     };
 
     return <ChartBlockComponent {...resProps} />;
-}
+};

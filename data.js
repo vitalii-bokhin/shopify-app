@@ -23,6 +23,9 @@ const getRandomInt = (max) => {
 }
 
 for (let i = 0; i < 1024; i++) {
+    const sales = getRandomInt(50000) / 100;
+    const sales_to_market = sales - getRandomInt(20000) / 100;
+
     data.push({
         "cart": getRandomInt(30),
         "checkout": getRandomInt(50),
@@ -30,9 +33,11 @@ for (let i = 0; i < 1024; i++) {
         "date": format(date),
         "orders": getRandomInt(10),
         "return_customer_rate": getRandomInt(700) / 100,
-        "sales": getRandomInt(50000) / 100,
+        "sales": sales,
         "sessions": getRandomInt(1000),
         "visitors": getRandomInt(800),
+        "first_time": getRandomInt(33),
+        "sales_to_market": sales_to_market,
     });
 
     date.setDate(date.getDate() - 1);

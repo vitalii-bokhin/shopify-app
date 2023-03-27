@@ -40,7 +40,13 @@ export default function LineChartComponent(props) {
     };
 
     const tooltipOptions = {
-        valueFormatter: (value) => prefix + value,
+        valueFormatter: (value) => {
+            if (prefix === '$') {
+                return prefix + value.toFixed(2)
+            } else {
+                return prefix + value;
+            }
+        },
     };
 
     return (

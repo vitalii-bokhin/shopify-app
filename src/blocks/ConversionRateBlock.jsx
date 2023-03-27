@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useGetDataQuery } from '../app/services/userApi';
+import ContentLoader from '../components/ContentLoader';
 
 const TbRow = (props) => {
     return (
@@ -57,6 +59,14 @@ export default function ConversionRateBlock() {
     const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
     const { data, error, isLoading } = useGetDataQuery();
+    const [dataFetching, dataFetchingState] = useState(true);
+
+    useEffect(() => {
+        dataFetchingState(true);
+        setTimeout(() => {
+            dataFetchingState(false);
+        }, 2000);
+    }, [mainPeriod, comparativePeriod]);
 
     let resultData = [];
     let compareResultData = [];
@@ -141,7 +151,7 @@ export default function ConversionRateBlock() {
         items[2].rateDiff = (convertedRateCom - convertedRate) / (convertedRate / 100);
     }
 
-    return (
+    return isLoading || dataFetching ? <ContentLoader /> : (
         <div className="Polaris-LegacyStack_eaeo0 Polaris-LegacyStack--vertical_uiuuj">
             <div className="Polaris-LegacyStack__Item_yiyol">
                 <div className="fZGUC">

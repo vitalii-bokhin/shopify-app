@@ -1,28 +1,55 @@
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import randomInt from '../app/features/randomInt';
 import SimpleTableComponent from '../components/SimpleTableComponent';
 
 export default function SalesByTrafficSourceBlock() {
-    const items = [
+    const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
+    const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
+    const compAlias = useSelector((state) => state.datepicker.comparativeRange.alias);
+    const [dataFetching, dataFetchingState] = useState(true);
+
+    useEffect(() => {
+        dataFetchingState(true);
+        setTimeout(() => {
+            dataFetchingState(false);
+        }, 2000);
+    }, [mainPeriod, comparativePeriod]);
+
+    let items = [
         {
             id: 1,
             title: 'Social',
-            count: '$' + 16198.2,
+            count: randomInt(55000, 999999) / 100,
         },
         {
             id: 2,
             title: 'Direct',
-            count: '$' + 1709.81,
+            count: randomInt(55000, 999999) / 100,
         },
         {
             id: 3,
             title: '—',
-            count: '$' + 179.98,
+            count: randomInt(55000, 999999) / 100,
         },
         {
             id: 4,
             title: 'Search',
-            count: '$' + 89.99,
+            count: randomInt(55000, 999999) / 100,
         },
     ];
 
-    return <SimpleTableComponent items={items} />;
+    if (compAlias !== 'noComparison') {
+        items.forEach(item => {
+            const prev = randomInt(55000, 999999) / 100;
+            item.diff = (item.count - prev) / (item.count / 100);
+        });
+    }
+
+    items = items.map((item) => {
+        item.count = '$' + item.count;
+        return item;
+    });
+
+    return <SimpleTableComponent items={items} isLoading={dataFetching} />;
 };
