@@ -1,8 +1,6 @@
 import { AlphaStack, Box, Button, Collapsible, Columns, DatePicker, Icon, Inline, OptionList, Popover, Scrollable, Select, TextField, useBreakpoints } from '@shopify/polaris';
 import { ChevronDownMinor, ChevronUpMinor } from '@shopify/polaris-icons';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import formatDateToYearMonthDayDateString from '../app/features/formatDateToYearMonthDayDateString';
 
 const ShowButton = (props) => {
     return (
@@ -82,10 +80,6 @@ export default function DateRangePicker(props) {
         return date.length === 10 && isValidYearMonthDayDateString(date);
     }
     function parseYearMonthDayDateString(input) {
-        // Date-only strings (e.g. "1970-01-01") are treated as UTC, not local time
-        // when using new Date()
-        // We need to split year, month, day to pass into new Date() separately
-        // to get a localized Date
         const [year, month, day] = input.split("-");
         return new Date(Number(year), Number(month) - 1, Number(day));
     }
@@ -151,8 +145,7 @@ export default function DateRangePicker(props) {
     function handleInputBlur({ relatedTarget }) {
         const isRelatedTargetWithinPopover =
             relatedTarget != null && isNodeWithinPopover(relatedTarget);
-        // If focus moves from the TextField to the Popover
-        // we don't want to close the popover
+
         if (isRelatedTargetWithinPopover) {
             return;
         }

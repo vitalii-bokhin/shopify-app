@@ -222,6 +222,18 @@ const comparePrevPeriod = (date) => {
     switch (date.alias) {
         case 'today':
             return {
+                btnTitle: 'Compare: Yesterday',
+                from: new Date(
+                    new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
+                ),
+                to: new Date(
+                    new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
+                ),
+            };
+
+        case 'yesterday':
+            return {
+                btnTitle: 'Compare: Previous period',
                 from: new Date(
                     new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
                 ),
@@ -232,6 +244,7 @@ const comparePrevPeriod = (date) => {
 
         case 'last7days':
             return {
+                btnTitle: 'Compare: Previous period',
                 from: new Date(
                     new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 7).setHours(0, 0, 0, 0)
                 ),
@@ -242,6 +255,7 @@ const comparePrevPeriod = (date) => {
 
         case 'last30days':
             return {
+                btnTitle: 'Compare: Previous period',
                 from: new Date(
                     new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 30).setHours(0, 0, 0, 0)
                 ),
@@ -252,6 +266,7 @@ const comparePrevPeriod = (date) => {
 
         case 'last90days':
             return {
+                btnTitle: 'Compare: Previous period',
                 from: new Date(
                     new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 90).setHours(0, 0, 0, 0)
                 ),
@@ -262,6 +277,7 @@ const comparePrevPeriod = (date) => {
 
         case 'lastMonth':
             return {
+                btnTitle: 'Compare: Previous period',
                 from: new Date(
                     new Date(dFrom.getFullYear(), dFrom.getMonth() - 1, 1).setHours(0, 0, 0, 0)
                 ),
@@ -272,6 +288,7 @@ const comparePrevPeriod = (date) => {
 
         case 'lastYear':
             return {
+                btnTitle: 'Compare: Previous period',
                 from: new Date(
                     new Date(dFrom.getFullYear() - 1, 0, 1).setHours(0, 0, 0, 0)
                 ),
@@ -282,6 +299,7 @@ const comparePrevPeriod = (date) => {
 
         case 'weekToDate':
             return {
+                btnTitle: 'Compare: Previous period',
                 from: new Date((() => {
                     const date = new Date(dTo.getFullYear(), dTo.getMonth(), dTo.getDate() - 7);
                     const day = date.getDay();
@@ -295,6 +313,7 @@ const comparePrevPeriod = (date) => {
 
         case 'monthToDate':
             return {
+                btnTitle: 'Compare: Previous period',
                 from: new Date(
                     new Date(dTo.getFullYear(), dTo.getMonth() - 1, 1).setHours(0, 0, 0, 0)
                 ),
@@ -305,6 +324,7 @@ const comparePrevPeriod = (date) => {
 
         case 'quarterToDate':
             return {
+                btnTitle: 'Compare: Previous period',
                 from: new Date(
                     new Date(dFrom.getFullYear(), dFrom.getMonth() - 3, 1).setHours(0, 0, 0, 0)
                 ),
@@ -315,11 +335,25 @@ const comparePrevPeriod = (date) => {
 
         case 'yearToDate':
             return {
+                btnTitle: 'Compare: Previous period',
                 from: new Date(
                     new Date(dFrom.getFullYear() - 1, 0, 1).setHours(0, 0, 0, 0)
                 ),
                 to: new Date(
                     new Date(dTo.getFullYear() - 1, dTo.getMonth(), dTo.getDate()).setHours(0, 0, 0, 0)
+                ),
+            };
+
+        case 'custom':
+            const diff = dFrom.getTime() - (dTo.getTime() - dFrom.getTime());
+
+            return {
+                btnTitle: 'Compare: Previous period',
+                from: new Date(
+                    new Date(diff).setHours(0, 0, 0, 0)
+                ),
+                to: new Date(
+                    new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
                 ),
             };
     }
@@ -351,6 +385,7 @@ const comparePrevPeriod = (date) => {
         const end = new Date(lastYear, months[1] + 1, 0).setHours(0, 0, 0, 0);
 
         return {
+            btnTitle: 'Compare: Previous period',
             from: new Date(start),
             to: new Date(end),
         };
@@ -360,6 +395,7 @@ const comparePrevPeriod = (date) => {
         const diff = dTo.getDate() - dFrom.getDate();
 
         return {
+            btnTitle: 'Compare: Previous period',
             from: new Date(
                 new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1 - diff).setHours(0, 0, 0, 0)
             ),
@@ -375,6 +411,7 @@ const comparePrevYear = (date) => {
     const dTo = new Date(date.period.to);
 
     return {
+        btnTitle: 'Compare: Previous year',
         from: new Date(
             new Date(dFrom.getFullYear() - 1, dFrom.getMonth(), dFrom.getDate()).setHours(0, 0, 0, 0)
         ),
@@ -389,14 +426,18 @@ export default function DatePickersContainerComponent() {
     const activeComparativeRange = useSelector((state) => state.datepicker.comparativeRange);
     const dispatch = useDispatch();
 
-    const setComparativeRange = (rangeState) => {
+    const setComparativeRange = (rangeState, mainRange) => {
+        if (!mainRange) {
+            mainRange = activeMainRange;
+        }
+
         const range = JSON.parse(JSON.stringify(rangeState));
 
         range.period.from = formatDateToYearMonthDayDateString(new Date(rangeState.period.from));
         range.period.to = formatDateToYearMonthDayDateString(new Date(rangeState.period.to));
 
-        if (rangeState.alias !== 'noComparison' && !rangeState.title.includes('Compare:')) {
-            range.title = 'Compare: ' + rangeState.title;
+        if (rangeState.alias !== 'noComparison') {
+            range.title = rangeState.period?.btnTitle || rangeState.title;
         }
 
         dispatch(datepickerActions.setComparativeRange(range));
@@ -415,7 +456,7 @@ export default function DatePickersContainerComponent() {
 
             compRange.period = comparePrevPeriod(range);
 
-            setComparativeRange(compRange);
+            setComparativeRange(compRange, range);
         }
     }
 

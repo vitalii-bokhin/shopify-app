@@ -3,6 +3,14 @@ import LineChartComponent from './LineChartComponent';
 import StackedChartComponent from './StackedChartComponent';
 
 export default function ChartBlockComponent(props) {
+    let total = props.total.toLocaleString('en-US');
+    let totalPrefix = props.totalPrefix;
+
+    if (props.totalPrefix === '$') {
+        totalPrefix = '';
+        total = props.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    }
+
     return props.isLoading ? <Loader /> : (
         <div className="Polaris-LegacyStack_eaeo0 Polaris-LegacyStack--vertical_uiuuj">
             <div className="Polaris-LegacyStack__Item_yiyol">
@@ -10,7 +18,7 @@ export default function ChartBlockComponent(props) {
                     <div className="Polaris-LegacyStack_eaeo0 Polaris-LegacyStack--alignmentCenter_1rtaw">
                         <div className="Polaris-LegacyStack__Item_yiyol Polaris-LegacyStack__Item--fill_vpuzt">
                             <p className="Polaris-Text--root_yj4ah Polaris-Text--headingXl_1dele">
-                                {props.totalPrefix}{props.total}
+                                {totalPrefix}{total}
                             </p>
                         </div>
                         <div className="Polaris-LegacyStack__Item_yiyol">
@@ -51,7 +59,7 @@ export default function ChartBlockComponent(props) {
                             <tr className="smW4Q">
                                 <td className="R6ls0" colSpan="2">{props.totalTableTitle}</td>
                                 <td className="R6ls0 Ay5iz QcJza" colSpan="2">
-                                    {props.totalTablePrefix}{props.totalTable}
+                                    {props.totalTablePrefix}{props.totalTable.toLocaleString('en-US')}
                                 </td>
                                 {props.totalTableDiff === 0 && (
                                     <td className="R6ls0 Ay5iz BLABy" colSpan="2">

@@ -16,15 +16,16 @@ const format = (date) => {
 
 const data = [];
 const date = new Date();
+date.setMonth(6);
 date.setHours(0, 0, 0, 0);
 
 const getRandomInt = (max) => {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-for (let i = 0; i < 1024; i++) {
+for (let i = 0; i < 1256; i++) {
     const sales = getRandomInt(50000) / 100;
-    const sales_to_market = sales - getRandomInt(20000) / 100;
+    const sales_to_market = sales - getRandomInt(5000) / 100;
 
     data.push({
         "cart": getRandomInt(30),
@@ -37,7 +38,7 @@ for (let i = 0; i < 1024; i++) {
         "sessions": getRandomInt(1000),
         "visitors": getRandomInt(800),
         "first_time": getRandomInt(33),
-        "sales_to_market": sales_to_market,
+        "sales_to_market": sales_to_market > 0 ? sales_to_market : 0,
     });
 
     date.setDate(date.getDate() - 1);

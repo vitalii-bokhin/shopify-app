@@ -6,7 +6,8 @@ export default function SimpleTableComponent(props) {
     return props.isLoading ? <ContentLoader /> : (
         <table className="bsaOo">
             {props.items.map((item) => {
-                const value = item.count ?? item.value;
+                let value = item.count ?? item.value;
+                value = (props.prefix ?? '') + value.toLocaleString('en-US');
 
                 return (
                     <tbody key={item.id}>

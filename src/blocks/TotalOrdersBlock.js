@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import distributeForDay from '../app/features/distributeForDay';
 import formatDateToString from '../app/features/formatDateToString';
+import formatDateToTimeString from '../app/features/formatDateToTimeString';
 import { useGetDataQuery } from '../app/services/userApi';
 import ChartBlockComponent from '../components/ChartBlockComponent';
 
 export default function TotalOrdersBlock() {
-    const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
+    const { alias: mainPeriodAlias, period: mainPeriod } = useSelector((state) => state.datepicker.mainRange);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
     const { data, isLoading } = useGetDataQuery();
     const [dataFetching, dataFetchingState] = useState(true);
@@ -36,6 +38,31 @@ export default function TotalOrdersBlock() {
                     ...item,
                 };
             });
+
+        if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+            const dayItem = resultData[0];
+
+            if (dayItem) {
+                const valuesByHours = distributeForDay(mainPeriodAlias, dayItem.orders, (val) => Math.round(val));
+                let date = new Date(dayItem.date);
+
+                resultData = [];
+
+                delete dayItem.key;
+                delete dayItem.value;
+
+                valuesByHours.forEach((val, i) => {
+                    const clonedDayItem = JSON.parse(JSON.stringify(dayItem));
+
+                    date.setHours(i, 0, 0, 0);
+
+                    clonedDayItem.key = formatDateToString(date, { month: 'short', day: 'numeric' }) + ', ' + formatDateToTimeString(date);
+                    clonedDayItem.value = val;
+
+                    resultData.push(clonedDayItem);
+                });
+            }
+        }
     }
 
     if (comparativePeriod.from && comparativePeriod.to && data) {
@@ -54,6 +81,31 @@ export default function TotalOrdersBlock() {
                     ...item,
                 };
             });
+
+        if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+            const dayItem = compareResultData[0];
+
+            if (dayItem) {
+                const valuesByHours = distributeForDay(mainPeriodAlias + '2', dayItem.orders, (val) => Math.round(val));
+                let date = new Date(dayItem.date);
+
+                compareResultData = [];
+
+                delete dayItem.key;
+                delete dayItem.value;
+
+                valuesByHours.forEach((val, i) => {
+                    const clonedDayItem = JSON.parse(JSON.stringify(dayItem));
+
+                    date.setHours(i, 0, 0, 0);
+
+                    clonedDayItem.key = formatDateToString(date, { month: 'short', day: 'numeric' }) + ', ' + formatDateToTimeString(date);
+                    clonedDayItem.value = val;
+
+                    compareResultData.push(clonedDayItem);
+                });
+            }
+        }
     }
 
     let total = 0;
@@ -63,10 +115,17 @@ export default function TotalOrdersBlock() {
     let totalTable = '';
     let compareTotalTable = '';
 
-    total = resultData.reduce((acc, item) => acc + item.orders, 0);
-    totalTable = total;
-    compareTotal = compareResultData.reduce((acc, item) => acc + item.orders, 0);
-    compareTotalTable = compareTotal;
+    if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+        total = resultData[0]?.orders;
+        totalTable = total;
+        compareTotal = compareResultData[0]?.orders;
+        compareTotalTable = compareTotal;
+    } else {
+        total = resultData.reduce((acc, item) => acc + item.orders, 0);
+        totalTable = total;
+        compareTotal = compareResultData.reduce((acc, item) => acc + item.orders, 0);
+        compareTotalTable = compareTotal;
+    }
 
     if (compareTotal && total) {
         totalDiff = (total - compareTotal) / (total / 100);

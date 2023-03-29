@@ -1,16 +1,16 @@
 import AverageOrderBlock from './AverageOrderBlock';
 import CohortBlock from './CohortBlock';
 import ConversionRateBlock from './ConversionRateBlock';
-import FirstBlock from './FirstBlock';
+import TotalSalesBlock from './TotalSalesBlock';
 import SalesBySocialBlock from './SalesBySocialBlock';
 import SalesByTrafficSourceBlock from './SalesByTrafficSourceBlock';
 import SalesToMarketBlock from './SalesToMarketBlock';
-import SecondBlock from './SecondBlock';
+import SessionsBlock from './SessionsBlock';
 import SessionsByDeviceBlock from './SessionsByDeviceBlock';
 import SessionsByLocationBlock from './SessionsByLocationBlock';
 import SessionsBySocialBlock from './SessionsBySocialBlock';
 import SessionsByTrafficBlock from './SessionsByTrafficBlock';
-import ThirdBlock from './ThirdBlock';
+import ReturningCustomerBlock from './ReturningCustomerBlock';
 import TopBar from './TopBar';
 import TopLandingsBySessionsBlock from './TopLandingsBySessionsBlock';
 import TopProductsBlock from './TopProductsBlock';
@@ -72,15 +72,11 @@ export default function MainContainer(props) {
                                                         className="vrNiM">Total sales</span></h2>
                                                 </button></div>
                                             </div>
-                                            <div className="KKRBh"><a data-polaris-unstyled="true"
-                                                className="Polaris-Link_yj5sy Polaris-Link--removeUnderline_adav6"
-                                                aria-label="View the Total sales report"
-                                                href="/admin/reports/sales_over_time?since=2023-03-13&amp;until=2023-03-13&amp;over=hour">View
-                                                report</a></div>
+                                            <div className="KKRBh"></div>
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <FirstBlock type="sales" />
+                                        <TotalSalesBlock type="sales" />
                                     </div>
                                 </div>
                             </div>
@@ -101,11 +97,7 @@ export default function MainContainer(props) {
                                                         className="vrNiM">Conversion rate</span></h2>
                                                 </button></div>
                                             </div>
-                                            <div className="KKRBh"><a data-polaris-unstyled="true"
-                                                className="Polaris-Link_yj5sy Polaris-Link--removeUnderline_adav6"
-                                                aria-label="View the Conversion rate report"
-                                                href="/admin/reports/online_store_conversion?since=2023-03-13&amp;until=2023-03-13&amp;over=hour">View
-                                                report</a></div>
+                                            <div className="KKRBh"></div>
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
@@ -130,11 +122,7 @@ export default function MainContainer(props) {
                                                         className="vrNiM">Total orders</span></h2>
                                                 </button></div>
                                             </div>
-                                            <div className="KKRBh"><a data-polaris-unstyled="true"
-                                                className="Polaris-Link_yj5sy Polaris-Link--removeUnderline_adav6"
-                                                aria-label="View the Total orders report"
-                                                href="/admin/reports/orders_over_time?since=2023-03-13&amp;until=2023-03-13&amp;over=hour">View
-                                                report</a></div>
+                                            <div className="KKRBh"></div>
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
@@ -213,11 +201,7 @@ export default function MainContainer(props) {
                                                         className="vrNiM">Sales attributed to marketing</span></h2>
                                                 </button></div>
                                             </div>
-                                            <div className="KKRBh"><a data-polaris-unstyled="true"
-                                                className="Polaris-Link_yj5sy Polaris-Link--removeUnderline_adav6"
-                                                aria-label="View the Sales attributed to marketing report"
-                                                href="/admin/reports/sales_attributed_to_marketing?since=2023-03-13&amp;until=2023-03-13">View
-                                                report</a></div>
+                                            <div className="KKRBh"></div>
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
@@ -252,7 +236,7 @@ export default function MainContainer(props) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <SecondBlock type="sessions" />
+                                        <SessionsBlock type="sessions" />
                                     </div>
                                 </div>
                             </div>
@@ -273,11 +257,7 @@ export default function MainContainer(props) {
                                                         className="vrNiM">Average order value</span></h2>
                                                 </button></div>
                                             </div>
-                                            <div className="KKRBh"><a data-polaris-unstyled="true"
-                                                className="Polaris-Link_yj5sy Polaris-Link--removeUnderline_adav6"
-                                                aria-label="View the Average order value report"
-                                                href="/admin/reports/average_order_value?since=2023-03-13&amp;until=2023-03-13&amp;over=hour">View
-                                                report</a></div>
+                                            <div className="KKRBh"></div>
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
@@ -302,11 +282,7 @@ export default function MainContainer(props) {
                                                         className="vrNiM">Top products by units sold</span></h2>
                                                 </button></div>
                                             </div>
-                                            <div className="KKRBh"><a data-polaris-unstyled="true"
-                                                className="Polaris-Link_yj5sy Polaris-Link--removeUnderline_adav6"
-                                                aria-label="View the Top products by units sold report"
-                                                href="/admin/reports/sales_by_product_name?since=2023-03-13&amp;until=2023-03-13&amp;sort=net_quantity%2CDESC">View
-                                                report</a></div>
+                                            <div className="KKRBh"></div>
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
@@ -418,7 +394,7 @@ export default function MainContainer(props) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <ThirdBlock type="return_customer_rate" />
+                                        <ReturningCustomerBlock type="return_customer_rate" />
                                     </div>
                                 </div>
                             </div>
@@ -439,10 +415,7 @@ export default function MainContainer(props) {
                                                         className="vrNiM">Customer cohort analysis</span></h2>
                                                 </button></div>
                                             </div>
-                                            <div className="KKRBh"><a data-polaris-unstyled="true"
-                                                className="Polaris-Link_yj5sy Polaris-Link--removeUnderline_adav6"
-                                                aria-label="View the Customer cohort analysis report"
-                                                href="/admin/reports/customer_cohort_analysis">View report</a></div>
+                                            <div className="KKRBh"></div>
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
@@ -492,11 +465,7 @@ export default function MainContainer(props) {
                                                         className="vrNiM">Sales by traffic source</span></h2>
                                                 </button></div>
                                             </div>
-                                            <div className="KKRBh"><a data-polaris-unstyled="true"
-                                                className="Polaris-Link_yj5sy Polaris-Link--removeUnderline_adav6"
-                                                aria-label="View the Sales by traffic source report"
-                                                href="/admin/reports/sales_by_referrer?since=2023-03-13&amp;until=2023-03-13">View
-                                                report</a></div>
+                                            <div className="KKRBh"></div>
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">

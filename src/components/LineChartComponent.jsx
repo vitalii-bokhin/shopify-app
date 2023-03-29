@@ -1,7 +1,9 @@
 import { LineChart } from '@shopify/polaris-viz';
+import { useSelector } from 'react-redux';
 import formatDateToString from '../app/features/formatDateToString';
 
 export default function LineChartComponent(props) {
+    const mainPeriodAlias = useSelector((state) => state.datepicker.mainRange.alias);
     const data = [];
     let prefix = props.prefix;
 
@@ -31,12 +33,22 @@ export default function LineChartComponent(props) {
 
     const xAxisOptions = {
         labelFormatter: (value) => {
-            return value.split(',')[0];
+            if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+                return value.split(',')[1];
+            } else {
+                return value.split(',')[0];
+            }
         },
     };
 
     const yAxisOptions = {
-        labelFormatter: (value) => prefix + value.toFixed(0),
+        labelFormatter: (value) => {
+            if (value >= 1000) {
+                value = value / 1000 + 'K';
+            }
+
+            return prefix + value;
+        },
     };
 
     const tooltipOptions = {

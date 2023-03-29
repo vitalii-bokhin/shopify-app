@@ -1,6 +1,8 @@
 import { StackedAreaChart } from '@shopify/polaris-viz';
+import { useSelector } from 'react-redux';
 
 export default function StackedChartComponent(props) {
+    const mainPeriodAlias = useSelector((state) => state.datepicker.mainRange.alias);
     const data = [];
     let prefix = props.prefix;
 
@@ -16,7 +18,11 @@ export default function StackedChartComponent(props) {
 
     const xAxisOptions = {
         labelFormatter: (value) => {
-            return value.split(',')[0];
+            if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+                return value.split(',')[1];
+            } else {
+                return value.split(',')[0];
+            }
         },
     };
 

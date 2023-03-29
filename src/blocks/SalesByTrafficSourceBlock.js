@@ -46,10 +46,5 @@ export default function SalesByTrafficSourceBlock() {
         });
     }
 
-    items = items.map((item) => {
-        item.count = '$' + item.count;
-        return item;
-    });
-
-    return <SimpleTableComponent items={items} isLoading={dataFetching} />;
+    return <SimpleTableComponent items={items} prefix="$" isLoading={dataFetching} />;
 };

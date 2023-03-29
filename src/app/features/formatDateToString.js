@@ -1,5 +1,5 @@
-export default function formatDateToString(date) {
+export default function formatDateToString(date, options) {
     date = new Date(date);
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    options = options || { year: 'numeric', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 };
