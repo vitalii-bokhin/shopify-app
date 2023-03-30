@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useGetDataQuery } from '../app/services/userApi';
 import ContentLoader from '../components/ContentLoader';
 
 const TbRow = (props) => {
@@ -55,10 +54,9 @@ const TbRow = (props) => {
     );
 }
 
-export default function ConversionRateBlock() {
+export default function ConversionRateBlock({ data, isLoading }) {
     const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
-    const { data, error, isLoading } = useGetDataQuery();
     const [dataFetching, dataFetchingState] = useState(true);
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-import DatePickersContainerComponent from '../components/DatePickersContainerComponent';
+import DatePickersContainerComponent from '../components/datepickers/DatePickersContainerComponent';
 
 export default function TopBar() {
     return (

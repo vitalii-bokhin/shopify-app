@@ -30,3 +30,7 @@ table {
 .Polaris-Frame__Content_xd1mk{
   padding-bottom: 0 !important;
 }
+
+.Polaris-Navigation__ItemInnerWrapper_1umqf > div{
+  width: 100%;
+}

@@ -1,10 +1,13 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
+import { useGetDataQuery } from './app/services/firebaseApi';
 import Header from './blocks/Header';
 import MainContainer from './blocks/MainContainer';
 import Sidebar from './blocks/Sidebar';
 
 export default function App() {
     const [appLoading, setAppLoading] = useState(true);
+    const { data, isLoading } = useGetDataQuery();
 
     useEffect(() => {
         setTimeout(() => {
@@ -21,14 +24,21 @@ export default function App() {
             </div>
             <div>
                 <div aria-label="Navigation" className="Polaris-Frame__Navigation_1ajsq" id="AppFrameNav">
-                    <Sidebar appLoading={appLoading} />
+                    <Sidebar
+                        appLoading={appLoading}
+                        ordersCount={data.ordersCount}
+                    />
                 </div>
             </div>
             <div className="Polaris-Frame__ContextualSaveBar_14m7v Polaris-Frame-CSSAnimation--startFade_1gu4x"></div>
             <main className="Polaris-Frame__Main_yj28s" id="AppFrameMain" data-has-global-ribbon="true">
                 <div className="Polaris-Frame__Content_xd1mk">
                     <div id="AppMainContainer" className="Polaris-Page_yisnh Polaris-Page--fullWidth_zyvh4">
-                        <MainContainer appLoading={appLoading} />
+                        <MainContainer
+                            appLoading={appLoading}
+                            isLoading={isLoading}
+                            data={data.dates}
+                        />
                     </div>
                 </div>
             </main>

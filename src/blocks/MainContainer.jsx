@@ -17,8 +17,8 @@ import TopProductsBlock from './TopProductsBlock';
 import TopReferrersBySessionsBlock from './TopReferrersBySessionsBlock';
 import TotalOrdersBlock from './TotalOrdersBlock';
 
-export default function MainContainer(props) {
-    return props.appLoading ? <></> : (
+export default function MainContainer({ appLoading, isLoading, data }) {
+    return appLoading ? <></> : (
         <>
             <div dangerouslySetInnerHTML={{
                 __html: `<div class="Polaris-Box_375yx"
@@ -76,7 +76,11 @@ export default function MainContainer(props) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <TotalSalesBlock type="sales" />
+                                        <TotalSalesBlock
+                                            type="sales"
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -101,7 +105,10 @@ export default function MainContainer(props) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <ConversionRateBlock />
+                                        <ConversionRateBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +133,10 @@ export default function MainContainer(props) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <TotalOrdersBlock />
+                                        <TotalOrdersBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +215,10 @@ export default function MainContainer(props) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <SalesToMarketBlock />
+                                        <SalesToMarketBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -236,7 +249,11 @@ export default function MainContainer(props) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <SessionsBlock type="sessions" />
+                                        <SessionsBlock
+                                            type="sessions"
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -261,7 +278,10 @@ export default function MainContainer(props) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <AverageOrderBlock />
+                                        <AverageOrderBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -394,7 +414,11 @@ export default function MainContainer(props) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <ReturningCustomerBlock type="return_customer_rate" />
+                                        <ReturningCustomerBlock
+                                            type="return_customer_rate"
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>

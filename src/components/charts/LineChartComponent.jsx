@@ -1,6 +1,6 @@
 import { LineChart } from '@shopify/polaris-viz';
 import { useSelector } from 'react-redux';
-import formatDateToString from '../app/features/formatDateToString';
+import formatDateToString from '../../app/features/formatDateToString';
 
 export default function LineChartComponent(props) {
     const mainPeriodAlias = useSelector((state) => state.datepicker.mainRange.alias);

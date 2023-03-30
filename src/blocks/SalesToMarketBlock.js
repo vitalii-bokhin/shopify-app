@@ -3,13 +3,11 @@ import { useSelector } from 'react-redux';
 import distributeForDay from '../app/features/distributeForDay';
 import formatDateToString from '../app/features/formatDateToString';
 import formatDateToTimeString from '../app/features/formatDateToTimeString';
-import { useGetDataQuery } from '../app/services/userApi';
-import ChartBlockComponent from '../components/ChartBlockComponent';
+import ChartBlockComponent from '../components/charts/ChartBlockComponent';
 
-export default function SalesToMarketBlock() {
+export default function SalesToMarketBlock({ data, isLoading }) {
     const { alias: mainPeriodAlias, period: mainPeriod } = useSelector((state) => state.datepicker.mainRange);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
-    const { data, isLoading } = useGetDataQuery();
     const [dataFetching, dataFetchingState] = useState(true);
 
     useEffect(() => {

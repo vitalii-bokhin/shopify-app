@@ -1,4 +1,4 @@
-import Loader from './Loader';
+import Loader from '../Loader';
 import LineChartComponent from './LineChartComponent';
 import StackedChartComponent from './StackedChartComponent';
 
