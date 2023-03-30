@@ -3,51 +3,6 @@ import { initializeApp } from "firebase/app";
 import { collection, doc, getDoc, getDocs, getFirestore, updateDoc } from "firebase/firestore";
 import formatDateToYearMonthDayDateString from '../features/formatDateToYearMonthDayDateString';
 
-export type DateItem = {
-    date: string;
-    cart: number;
-    checkout: number;
-    converted_sessions: number;
-    orders: number;
-    return_customer_rate: number;
-    sales: number;
-    sessions: number;
-    visitors: number;
-    first_time: number;
-    sales_to_market: number;
-};
-
-type UserData = {
-    dates: DateItem[];
-    ordersCount: number;
-    userName: string;
-    avatar: string;
-}
-
-type IncomingDataItem = {
-    date: string | number | Date;
-    addedToCart: any;
-    reachedCheckout: any;
-    sessionConverted: any;
-    totalOrders: any;
-    totalSalesPerDay: any;
-    sessions: any;
-    visitors: any;
-};
-
-type QueryArgs = {
-    endpoint?: string;
-    body?: any;
-};
-
-type SettingsResult = {
-    currentUserId: number;
-    usersSettings: {
-        id: number;
-        ordersCount: number;
-    }[];
-};
-
 const firebaseConfig = {
     apiKey: "AIzaSyD3-Dggsh_sBjubQhflKmmLv22MCNqyys4",
     authDomain: "saapp-1d219.firebaseapp.com",

@@ -11,6 +11,7 @@ export default function ReturningCustomerBlock(props) {
     const { alias: mainPeriodAlias, period: mainPeriod } = useSelector((state) => state.datepicker.mainRange);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
     const [dataFetching, dataFetchingState] = useState(true);
+    const isOneDay = mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday' || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to);
 
     useEffect(() => {
         dataFetchingState(true);
@@ -25,11 +26,7 @@ export default function ReturningCustomerBlock(props) {
     let resultSecondData = [];
 
     if (resultData.length) {
-        if (
-            mainPeriodAlias === 'today'
-            || mainPeriodAlias === 'yesterday'
-            || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to)
-        ) {
+        if (isOneDay) {
             const dayItem = resultData[0];
 
             if (dayItem) {
@@ -71,11 +68,7 @@ export default function ReturningCustomerBlock(props) {
                 };
             });
 
-        if (
-            mainPeriodAlias === 'today'
-            || mainPeriodAlias === 'yesterday'
-            || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to)
-        ) {
+        if (isOneDay) {
             const dayItem = resultSecondData[0];
 
             if (dayItem) {

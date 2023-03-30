@@ -10,6 +10,7 @@ export default function TotalOrdersBlock({ data, isLoading }) {
     const { alias: mainPeriodAlias, period: mainPeriod } = useSelector((state) => state.datepicker.mainRange);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
     const [dataFetching, dataFetchingState] = useState(true);
+    const isOneDay = mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday' || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to);
 
     useEffect(() => {
         dataFetchingState(true);
@@ -21,65 +22,57 @@ export default function TotalOrdersBlock({ data, isLoading }) {
     // filter
     let { resultData, compareResultData } = getFilter({ data, mainPeriod, comparativePeriod, fieldToValue: 'orders' });
 
-    if (resultData.length) {
-        if (
-            mainPeriodAlias === 'today'
-            || mainPeriodAlias === 'yesterday'
-            || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to)
-        ) {
-            const dayItem = resultData[0];
+    if (resultData.length && isOneDay) {
+        const dayItem = resultData[0];
 
-            if (dayItem) {
-                const valuesByHours = distributeForDay(mainPeriodAlias, dayItem.orders, (val) => Math.round(val));
-                let date = new Date(dayItem.date);
+        if (dayItem) {
+            const valuesByHours = distributeForDay(mainPeriodAlias, dayItem.orders, (val) => Math.round(val));
+            let date = new Date(dayItem.date);
 
-                resultData = [];
+            resultData = [];
 
-                delete dayItem.key;
-                delete dayItem.value;
+            delete dayItem.key;
+            delete dayItem.value;
 
-                valuesByHours.forEach((val, i) => {
-                    const clonedDayItem = JSON.parse(JSON.stringify(dayItem));
-
-                    date.setHours(i, 0, 0, 0);
-
-                    clonedDayItem.key = formatDateToString(date, { month: 'short', day: 'numeric' }) + ', ' + formatDateToTimeString(date);
-                    clonedDayItem.value = val;
-
-                    resultData.push(clonedDayItem);
-                });
+            if (valuesByHours.reduce((acc, val) => acc + val, 0) < dayItem.orders) {
+                valuesByHours[12]++;
             }
+
+            valuesByHours.forEach((val, i) => {
+                const clonedDayItem = JSON.parse(JSON.stringify(dayItem));
+
+                date.setHours(i, 0, 0, 0);
+
+                clonedDayItem.key = formatDateToString(date, { month: 'short', day: 'numeric' }) + ', ' + formatDateToTimeString(date);
+                clonedDayItem.value = val;
+
+                resultData.push(clonedDayItem);
+            });
         }
     }
 
-    if (comparativePeriod.from && comparativePeriod.to && compareResultData.length) {
-        if (
-            mainPeriodAlias === 'today'
-            || mainPeriodAlias === 'yesterday'
-            || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to)
-        ) {
-            const dayItem = compareResultData[0];
+    if (comparativePeriod.from && comparativePeriod.to && compareResultData.length && isOneDay) {
+        const dayItem = compareResultData[0];
 
-            if (dayItem) {
-                const valuesByHours = distributeForDay(mainPeriodAlias + '2', dayItem.orders, (val) => Math.round(val));
-                let date = new Date(dayItem.date);
+        if (dayItem) {
+            const valuesByHours = distributeForDay(mainPeriodAlias + '2', dayItem.orders, (val) => Math.round(val));
+            let date = new Date(dayItem.date);
 
-                compareResultData = [];
+            compareResultData = [];
 
-                delete dayItem.key;
-                delete dayItem.value;
+            delete dayItem.key;
+            delete dayItem.value;
 
-                valuesByHours.forEach((val, i) => {
-                    const clonedDayItem = JSON.parse(JSON.stringify(dayItem));
+            valuesByHours.forEach((val, i) => {
+                const clonedDayItem = JSON.parse(JSON.stringify(dayItem));
 
-                    date.setHours(i, 0, 0, 0);
+                date.setHours(i, 0, 0, 0);
 
-                    clonedDayItem.key = formatDateToString(date, { month: 'short', day: 'numeric' }) + ', ' + formatDateToTimeString(date);
-                    clonedDayItem.value = val;
+                clonedDayItem.key = formatDateToString(date, { month: 'short', day: 'numeric' }) + ', ' + formatDateToTimeString(date);
+                clonedDayItem.value = val;
 
-                    compareResultData.push(clonedDayItem);
-                });
-            }
+                compareResultData.push(clonedDayItem);
+            });
         }
     }
 
@@ -90,7 +83,7 @@ export default function TotalOrdersBlock({ data, isLoading }) {
     let totalTable = '';
     let compareTotalTable = '';
 
-    if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+    if (isOneDay) {
         total = resultData[0]?.orders;
         totalTable = total;
         compareTotal = compareResultData[0]?.orders;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import getFilter from 'src/app/features/getFilter';
 import distributeForDay from '../app/features/distributeForDay';
 import formatDateToString from '../app/features/formatDateToString';
 import formatDateToTimeString from '../app/features/formatDateToTimeString';
@@ -9,6 +10,7 @@ export default function SalesToMarketBlock({ data, isLoading }) {
     const { alias: mainPeriodAlias, period: mainPeriod } = useSelector((state) => state.datepicker.mainRange);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
     const [dataFetching, dataFetchingState] = useState(true);
+    const isOneDay = mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday' || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to);
 
     useEffect(() => {
         dataFetchingState(true);
@@ -17,92 +19,56 @@ export default function SalesToMarketBlock({ data, isLoading }) {
         }, 2000);
     }, [mainPeriod, comparativePeriod]);
 
-    let resultData = [];
-    let compareResultData = [];
+    // filter
+    let { resultData, compareResultData } = getFilter({ data, mainPeriod, comparativePeriod, fieldToValue: 'sales_to_market' });
 
-    if (data) {
-        resultData = data
-            .filter((item) => {
-                const itemDate = new Date(item.date).setHours(0, 0, 0, 0);
-                const dateFrom = new Date(mainPeriod.from).setHours(0, 0, 0, 0);
-                const dateTo = new Date(mainPeriod.to).setHours(0, 0, 0, 0);
+    if (resultData.length && isOneDay) {
+        const dayItem = resultData[0];
 
-                return dateFrom <= itemDate && itemDate <= dateTo;
-            })
-            .map((item) => {
-                return {
-                    key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.sales_to_market,
-                    ...item,
-                };
+        if (dayItem) {
+            const valuesByHours = distributeForDay(mainPeriodAlias, dayItem.sales_to_market, (val) => Math.round(val));
+            let date = new Date(dayItem.date);
+
+            resultData = [];
+
+            delete dayItem.key;
+            delete dayItem.value;
+
+            valuesByHours.forEach((val, i) => {
+                const clonedDayItem = JSON.parse(JSON.stringify(dayItem));
+
+                date.setHours(i, 0, 0, 0);
+
+                clonedDayItem.key = formatDateToString(date, { month: 'short', day: 'numeric' }) + ', ' + formatDateToTimeString(date);
+                clonedDayItem.value = val;
+
+                resultData.push(clonedDayItem);
             });
-
-        if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
-            const dayItem = resultData[0];
-
-            if (dayItem) {
-                const valuesByHours = distributeForDay(mainPeriodAlias, dayItem.sales_to_market, (val) => Math.round(val));
-                let date = new Date(dayItem.date);
-
-                resultData = [];
-
-                delete dayItem.key;
-                delete dayItem.value;
-
-                valuesByHours.forEach((val, i) => {
-                    const clonedDayItem = JSON.parse(JSON.stringify(dayItem));
-
-                    date.setHours(i, 0, 0, 0);
-
-                    clonedDayItem.key = formatDateToString(date, { month: 'short', day: 'numeric' }) + ', ' + formatDateToTimeString(date);
-                    clonedDayItem.value = val;
-
-                    resultData.push(clonedDayItem);
-                });
-            }
         }
     }
 
-    if (comparativePeriod.from && comparativePeriod.to && data) {
-        compareResultData = data
-            .filter((item) => {
-                const itemDate = new Date(item.date).setHours(0, 0, 0, 0);
-                const dateFrom = new Date(comparativePeriod.from).setHours(0, 0, 0, 0);
-                const dateTo = new Date(comparativePeriod.to).setHours(0, 0, 0, 0);
+    if (comparativePeriod.from && comparativePeriod.to && compareResultData.length && isOneDay) {
+        const dayItem = compareResultData[0];
 
-                return dateFrom <= itemDate && itemDate <= dateTo;
-            })
-            .map((item) => {
-                return {
-                    key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.sales_to_market,
-                    ...item,
-                };
+        if (dayItem) {
+            const valuesByHours = distributeForDay(mainPeriodAlias + '2', dayItem.sales_to_market, (val) => Math.round(val));
+            let date = new Date(dayItem.date);
+
+            compareResultData = [];
+
+            delete dayItem.key;
+            delete dayItem.value;
+
+            valuesByHours.forEach((val, i) => {
+                const clonedDayItem = JSON.parse(JSON.stringify(dayItem));
+
+                date.setHours(i, 0, 0, 0);
+
+                clonedDayItem.key = formatDateToString(date, { month: 'short', day: 'numeric' }) + ', ' + formatDateToTimeString(date);
+                clonedDayItem.value = val;
+
+                compareResultData.push(clonedDayItem);
             });
-
-        if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
-            const dayItem = compareResultData[0];
-
-            if (dayItem) {
-                const valuesByHours = distributeForDay(mainPeriodAlias + '2', dayItem.sales_to_market, (val) => Math.round(val));
-                let date = new Date(dayItem.date);
-
-                compareResultData = [];
-
-                delete dayItem.key;
-                delete dayItem.value;
-
-                valuesByHours.forEach((val, i) => {
-                    const clonedDayItem = JSON.parse(JSON.stringify(dayItem));
-
-                    date.setHours(i, 0, 0, 0);
-
-                    clonedDayItem.key = formatDateToString(date, { month: 'short', day: 'numeric' }) + ', ' + formatDateToTimeString(date);
-                    clonedDayItem.value = val;
-
-                    compareResultData.push(clonedDayItem);
-                });
-            }
         }
     }
 
@@ -110,7 +76,7 @@ export default function SalesToMarketBlock({ data, isLoading }) {
     let compareTotal = 0;
     let totalDiff = null;
 
-    if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+    if (isOneDay) {
         total = resultData[0]?.sales_to_market;
         compareTotal = compareResultData[0]?.sales_to_market;
     } else {

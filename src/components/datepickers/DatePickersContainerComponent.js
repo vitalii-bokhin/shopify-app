@@ -345,17 +345,30 @@ const comparePrevPeriod = (date) => {
             };
 
         case 'custom':
-            const diff = dFrom.getTime() - (dTo.getTime() - dFrom.getTime());
+            if (date.period.from === date.period.to) {
+                return {
+                    btnTitle: 'Compare: Previous period',
+                    from: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
+                    ),
+                    to: new Date(
+                        new Date(dTo.getFullYear(), dTo.getMonth(), dTo.getDate() - 1).setHours(0, 0, 0, 0)
+                    ),
+                };
 
-            return {
-                btnTitle: 'Compare: Previous period',
-                from: new Date(
-                    new Date(diff).setHours(0, 0, 0, 0)
-                ),
-                to: new Date(
-                    new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
-                ),
-            };
+            } else {
+                const diff = dFrom.getTime() - (dTo.getTime() - dFrom.getTime());
+
+                return {
+                    btnTitle: 'Compare: Previous period',
+                    from: new Date(
+                        new Date(diff).setHours(0, 0, 0, 0)
+                    ),
+                    to: new Date(
+                        new Date(dFrom.getFullYear(), dFrom.getMonth(), dFrom.getDate() - 1).setHours(0, 0, 0, 0)
+                    ),
+                };
+            }
     }
 
     if (date.alias.includes('Quarter')) {

@@ -1,4 +1,3 @@
-import { DateItem } from './../services/firebaseApi';
 import formatDateToString from './formatDateToString';
 
 type Props = {
