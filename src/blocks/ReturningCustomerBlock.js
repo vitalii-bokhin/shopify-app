@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import getFilter from 'src/app/features/getFilter';
 import distributeForDay from '../app/features/distributeForDay';
 import formatDateToString from '../app/features/formatDateToString';
 import formatDateToTimeString from '../app/features/formatDateToTimeString';
@@ -18,28 +19,17 @@ export default function ReturningCustomerBlock(props) {
         }, 2000);
     }, [mainPeriod, comparativePeriod]);
 
-    let resultData = [];
-    let compareResultData = [];
+    // filter
+    let { resultData, compareResultData } = getFilter({ data, mainPeriod, comparativePeriod, fieldToValue: 'first_time' });
+
     let resultSecondData = [];
 
-    if (data) {
-        resultData = data
-            .filter((item) => {
-                const itemDate = new Date(item.date).setHours(0, 0, 0, 0);
-                const dateFrom = new Date(mainPeriod.from).setHours(0, 0, 0, 0);
-                const dateTo = new Date(mainPeriod.to).setHours(0, 0, 0, 0);
-
-                return dateFrom <= itemDate && itemDate <= dateTo;
-            })
-            .map((item) => {
-                return {
-                    key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.first_time,
-                    ...item,
-                };
-            });
-
-        if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+    if (resultData.length) {
+        if (
+            mainPeriodAlias === 'today'
+            || mainPeriodAlias === 'yesterday'
+            || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to)
+        ) {
             const dayItem = resultData[0];
 
             if (dayItem) {
@@ -81,7 +71,11 @@ export default function ReturningCustomerBlock(props) {
                 };
             });
 
-        if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+        if (
+            mainPeriodAlias === 'today'
+            || mainPeriodAlias === 'yesterday'
+            || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to)
+        ) {
             const dayItem = resultSecondData[0];
 
             if (dayItem) {
@@ -106,24 +100,6 @@ export default function ReturningCustomerBlock(props) {
                 });
             }
         }
-    }
-
-    if (comparativePeriod.from && comparativePeriod.to && data) {
-        compareResultData = data
-            .filter((item) => {
-                const itemDate = new Date(item.date).setHours(0, 0, 0, 0);
-                const dateFrom = new Date(comparativePeriod.from).setHours(0, 0, 0, 0);
-                const dateTo = new Date(comparativePeriod.to).setHours(0, 0, 0, 0);
-
-                return dateFrom <= itemDate && itemDate <= dateTo;
-            })
-            .map((item) => {
-                return {
-                    key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.orders,
-                    ...item,
-                };
-            });
     }
 
     let total = resultData.reduce((acc, item) => acc + item.return_customer_rate, 0);

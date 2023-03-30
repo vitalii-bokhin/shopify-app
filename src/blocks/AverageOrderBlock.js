@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import getFilter from 'src/app/features/getFilter';
 import distributeForDay from '../app/features/distributeForDay';
 import formatDateToString from '../app/features/formatDateToString';
 import formatDateToTimeString from '../app/features/formatDateToTimeString';
@@ -17,27 +18,15 @@ export default function AverageOrderBlock({ data, isLoading }) {
         }, 2000);
     }, [mainPeriod, comparativePeriod]);
 
-    let resultData = [];
-    let compareResultData = [];
+    // filter
+    let { resultData, compareResultData } = getFilter({ data, mainPeriod, comparativePeriod, getValue: (item) => item.orders > 0 ? item.sales / item.orders : 0 });
 
-    if (data) {
-        resultData = data
-            .filter((item) => {
-                const itemDate = new Date(item.date).setHours(0, 0, 0, 0);
-                const dateFrom = new Date(mainPeriod.from).setHours(0, 0, 0, 0);
-                const dateTo = new Date(mainPeriod.to).setHours(0, 0, 0, 0);
-
-                return dateFrom <= itemDate && itemDate <= dateTo;
-            })
-            .map((item) => {
-                return {
-                    key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.orders > 0 ? item.sales / item.orders : 0,
-                    ...item,
-                };
-            });
-
-        if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+    if (resultData.length) {
+        if (
+            mainPeriodAlias === 'today'
+            || mainPeriodAlias === 'yesterday'
+            || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to)
+        ) {
             const dayItem = resultData[0];
 
             if (dayItem) {
@@ -63,24 +52,12 @@ export default function AverageOrderBlock({ data, isLoading }) {
         }
     }
 
-    if (comparativePeriod.from && comparativePeriod.to && data) {
-        compareResultData = data
-            .filter((item) => {
-                const itemDate = new Date(item.date).setHours(0, 0, 0, 0);
-                const dateFrom = new Date(comparativePeriod.from).setHours(0, 0, 0, 0);
-                const dateTo = new Date(comparativePeriod.to).setHours(0, 0, 0, 0);
-
-                return dateFrom <= itemDate && itemDate <= dateTo;
-            })
-            .map((item) => {
-                return {
-                    key: formatDateToString(new Date(item.date).setHours(0, 0, 0, 0)),
-                    value: item.orders > 0 ? item.sales / item.orders : 0,
-                    ...item,
-                };
-            });
-
-        if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+    if (comparativePeriod.from && comparativePeriod.to && compareResultData.length) {
+        if (
+            mainPeriodAlias === 'today'
+            || mainPeriodAlias === 'yesterday'
+            || (mainPeriodAlias === 'custom' && mainPeriod.from === mainPeriod.to)
+        ) {
             const dayItem = compareResultData[0];
 
             if (dayItem) {

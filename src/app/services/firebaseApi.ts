@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { collection, doc, getDoc, getDocs, getFirestore, updateDoc } from "firebase/firestore";
 import formatDateToYearMonthDayDateString from '../features/formatDateToYearMonthDayDateString';
 
-type DateItem = {
+export type DateItem = {
     date: string;
     cart: number;
     checkout: number;

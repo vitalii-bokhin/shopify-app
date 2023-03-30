@@ -18,7 +18,11 @@ export default function StackedChartComponent(props) {
 
     const xAxisOptions = {
         labelFormatter: (value) => {
-            if (mainPeriodAlias === 'today' || mainPeriodAlias === 'yesterday') {
+            if (
+                mainPeriodAlias === 'today'
+                || mainPeriodAlias === 'yesterday'
+                || (mainPeriodAlias === 'custom' && props.period.from === props.period.to)
+            ) {
                 return value.split(',')[1];
             } else {
                 return value.split(',')[0];

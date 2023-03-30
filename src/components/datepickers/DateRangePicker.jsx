@@ -1,6 +1,7 @@
 import { AlphaStack, Box, Button, Collapsible, Columns, DatePicker, Icon, Inline, OptionList, Popover, Scrollable, Select, TextField, useBreakpoints } from '@shopify/polaris';
 import { ChevronDownMinor, ChevronUpMinor } from '@shopify/polaris-icons';
 import { useEffect, useRef, useState } from 'react';
+import formatDateToString from './../../app/features/formatDateToString';
 
 const ShowButton = (props) => {
     return (
@@ -82,11 +83,6 @@ export default function DateRangePicker(props) {
     function parseYearMonthDayDateString(input) {
         const [year, month, day] = input.split("-");
         return new Date(Number(year), Number(month) - 1, Number(day));
-    }
-
-    const formatDateToString = (date) => {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
     }
 
     function nodeContainsDescendant(rootNode, descendant) {
@@ -189,10 +185,10 @@ export default function DateRangePicker(props) {
             setInputValues({
                 from: comparison && !dateRange.period.from
                     ? ''
-                    : formatDateToString(new Date(dateRange.period.from)),
+                    : formatDateToString(new Date(dateRange.period.from), { year: 'numeric', month: 'long', day: 'numeric' }),
                 to: comparison && !dateRange.period.from
                     ? ''
-                    : formatDateToString(new Date(dateRange.period.to)),
+                    : formatDateToString(new Date(dateRange.period.to), { year: 'numeric', month: 'long', day: 'numeric' }),
             });
 
             const newDate = {
@@ -211,9 +207,20 @@ export default function DateRangePicker(props) {
         }
     }, [dateRange]);
 
-    const buttonValue = dateRange.title === 'Custom'
-        ? new Date(dateRange.period.from).toDateString() + ' - ' + new Date(dateRange.period.to).toDateString()
-        : props.activeRange.title;
+    // button text
+    let buttonValue = props.activeRange.title;
+
+    if (props.activeRange.alias === 'custom') {
+        if (props.activeRange.from === props.activeRange.to) {
+            buttonValue = formatDateToString(dateRange.period.from);
+        } else {
+            buttonValue = formatDateToString(dateRange.period.from) + '–' + formatDateToString(dateRange.period.to);
+        }
+    }
+
+    // buttonValue = dateRange.title === 'Custom'
+    //     ? new Date(dateRange.period.from).toDateString() + ' - ' + new Date(dateRange.period.to).toDateString()
+    //     : props.activeRange.title;
 
     return (
         <Popover

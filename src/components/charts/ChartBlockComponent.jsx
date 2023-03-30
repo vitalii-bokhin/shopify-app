@@ -112,6 +112,7 @@ export default function ChartBlockComponent(props) {
                         firstData={props.firstChartData}
                         secondData={props.secondChartData}
                         prefix={props.chartPrefix}
+                        period={props.mainPeriod}
                     />
                 )}
                 {props.type !== 'return_customer_rate' && (
