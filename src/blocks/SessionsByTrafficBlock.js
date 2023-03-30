@@ -29,7 +29,7 @@ export default function SessionsByTrafficBlock() {
         },
         {
             id: 3,
-            title: '—',
+            title: 'Unknown',
             count: randomInt(50, 9999),
         },
         {

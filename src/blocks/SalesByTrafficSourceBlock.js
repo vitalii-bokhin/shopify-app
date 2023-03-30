@@ -29,7 +29,7 @@ export default function SalesByTrafficSourceBlock() {
         },
         {
             id: 3,
-            title: '—',
+            title: 'Unknown',
             count: randomInt(55000, 999999) / 100,
         },
         {

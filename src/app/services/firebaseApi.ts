@@ -20,6 +20,8 @@ type DateItem = {
 type UserData = {
     dates: DateItem[];
     ordersCount: number;
+    userName: string;
+    avatar: string;
 }
 
 type IncomingDataItem = {

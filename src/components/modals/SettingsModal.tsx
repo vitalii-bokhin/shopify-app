@@ -1,4 +1,4 @@
-import { Button, Columns, FormLayout, Label, Modal, RadioButton, Text, TextField } from '@shopify/polaris';
+import { Button, Columns, FormLayout, Inline, Label, Modal, RadioButton, Text, TextField } from '@shopify/polaris';
 import { useState, useCallback, MouseEventHandler, useEffect, useRef } from 'react';
 import { useLazyGetSettingsQuery, useUpdateSettingsMutation } from 'src/app/services/firebaseApi';
 
@@ -29,12 +29,11 @@ export default function SettingsModal() {
     const [countValue, setCountValue] = useState<{ [key: number]: number }>({});
 
     useEffect(() => {
-        console.log(active);
         if (active) {
             getData();
         }
     }, [active]);
-console.log(data);
+
     useEffect(() => {
         if (data) {
             setRaioValue(data.currentUserId);
@@ -115,17 +114,20 @@ console.log(data);
                         <Text variant="headingMd" as="p">
                             Order Count
                         </Text>
-                        {data && data.usersSettings.map((item) => (
-                            <TextField
-                                key={item.id}
-                                value={String(countValue[item.id])}
-                                label={item.id + " user"}
-                                type="number"
-                                name="ordersCount[]"
-                                autoComplete='off'
-                                onChange={(val) => setCountValue((state) => ({ ...state, [item.id]: Number(val) }))}
-                            />
-                        ))}
+                        <div className='formGrid'>
+                            {data && data.usersSettings.map((item) => (
+                                <div className="formGrid__item" key={item.id}>
+                                    <TextField
+                                        value={String(countValue[item.id])}
+                                        label={item.id + " user"}
+                                        type="number"
+                                        name="ordersCount[]"
+                                        autoComplete='off'
+                                        onChange={(val) => setCountValue((state) => ({ ...state, [item.id]: Number(val) }))}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </FormLayout>
                 </Columns>
             </Modal.Section>

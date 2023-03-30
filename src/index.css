@@ -27,10 +27,21 @@ table {
   font-size: inherit;
 }
 
-.Polaris-Frame__Content_xd1mk{
+.Polaris-Frame__Content_xd1mk {
   padding-bottom: 0 !important;
 }
 
-.Polaris-Navigation__ItemInnerWrapper_1umqf > div{
+.Polaris-Navigation__ItemInnerWrapper_1umqf>div {
   width: 100%;
+}
+
+.formGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.formGrid__item {
+  flex: 0 1 calc(50% - .5rem);
+  max-width: calc(50% - .5rem);
 }
