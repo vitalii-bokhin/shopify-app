@@ -3,12 +3,12 @@ import LineChartComponent from './LineChartComponent';
 import StackedChartComponent from './StackedChartComponent';
 
 export default function ChartBlockComponent(props) {
-    let total = props.total.toLocaleString('en-US');
+    let total = props.total?.toLocaleString('en-US') ?? 0;
     let totalPrefix = props.totalPrefix;
 
     if (props.totalPrefix === '$') {
         totalPrefix = '';
-        total = props.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        total = props.total?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) ?? '$0.00';
     }
 
     return props.isLoading ? <Loader /> : (

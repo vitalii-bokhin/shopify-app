@@ -1,12 +1,12 @@
 import { AlphaStack, Box, Button, Collapsible, Columns, DatePicker, Icon, Inline, OptionList, Popover, Scrollable, Select, TextField, useBreakpoints } from '@shopify/polaris';
 import { ChevronDownMinor, ChevronUpMinor } from '@shopify/polaris-icons';
-import { useEffect, useRef, useState } from 'react';
-import formatDateToString from './../../app/features/formatDateToString';
+import { JSXElementConstructor, MouseEventHandler, ReactElement, ReactFragment, ReactPortal, useEffect, useRef, useState } from 'react';
+import formatDateToString from '../../app/features/formatDateToString';
 
-const ShowButton = (props) => {
+const ShowButton = (props: { onClick: MouseEventHandler<HTMLButtonElement>; type: string; text: string | number | boolean | ReactFragment | ReactPortal | ReactElement<any, string | JSXElementConstructor<any>>; }) => {
     return (
         <button onClick={props.onClick} className="Polaris-Button_r99lw Polaris-Button--sizeSlim_1p6ue Polaris-Button--fullWidth_zyvh4"
-            type="button" tabIndex="0" aria-controls="Polarispopover130" aria-owns="Polarispopover130"
+            type="button" tabIndex={0} aria-controls="Polarispopover130" aria-owns="Polarispopover130"
             aria-expanded="false"><span className="Polaris-Button__Content_xd1mk">
 
                 {props.type !== 'comparison' && (
@@ -26,7 +26,7 @@ const ShowButton = (props) => {
     );
 }
 
-const DropDown = (props) => {
+const DropDown = (props: { button: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal; children: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal; }) => {
     const [open, setOpen] = useState(false);
 
     return (
@@ -44,6 +44,7 @@ const DropDown = (props) => {
                 open={open}
                 transition={{ duration: '100ms', timingFunction: 'linear' }}
                 expandOnPrint
+                id={''}
             >
                 {props.children}
             </Collapsible>
@@ -51,7 +52,37 @@ const DropDown = (props) => {
     );
 }
 
-export default function DateRangePicker(props) {
+type Props = {
+    ranges: {
+        title: string;
+        alias: string;
+        period: {
+            from: Date | string;
+            to: Date | string;
+        };
+    }[];
+    quartersRanges: {
+        title: string;
+        alias: string;
+        period: {
+            from: Date;
+            to: Date;
+        };
+    }[];
+    blackFridayRanges: {
+        title: string;
+        alias: string;
+        period: {
+            from: Date;
+            to: Date;
+        };
+    }[];
+    activeRange: DateRange;
+    setActiveRange: (rangeState: DateRange, mainRange?: DateRange) => void;
+    type?: string;
+};
+
+export default function DateRangePicker(props: Props) {
     const { mdDown, lgUp } = useBreakpoints();
     const shouldShowMultiMonth = lgUp;
     const comparison = props.type == 'comparison';
@@ -61,9 +92,8 @@ export default function DateRangePicker(props) {
     const blackFridayRanges = props.blackFridayRanges;
 
     const [popoverActive, setPopoverActive] = useState(false);
-    const [dateRange, setDateRange] = useState(props.activeRange);
-    const [inputValues, setInputValues] = useState({});
-
+    const [dateRange, setDateRange] = useState<any>(props.activeRange);
+    const [inputValues, setInputValues] = useState<any>({});
     const [{ month, year }, setDate] = useState({
         month: new Date(dateRange.period.from || Date.now()).getMonth(),
         year: new Date(dateRange.period.from || Date.now()).getFullYear(),
@@ -71,21 +101,21 @@ export default function DateRangePicker(props) {
 
     const datePickerRef = useRef(null);
     const VALID_YYYY_MM_DD_DATE_REGEX = /^\d{4}-\d{1,2}-\d{1,2}/;
-    function isDate(date) {
+    function isDate(date: string | number | Date) {
         return !isNaN(new Date(date).getDate());
     }
-    function isValidYearMonthDayDateString(date) {
+    function isValidYearMonthDayDateString(date: string) {
         return VALID_YYYY_MM_DD_DATE_REGEX.test(date) && isDate(date);
     }
-    function isValidDate(date) {
+    function isValidDate(date: string) {
         return date.length === 10 && isValidYearMonthDayDateString(date);
     }
-    function parseYearMonthDayDateString(input) {
+    function parseYearMonthDayDateString(input: string) {
         const [year, month, day] = input.split("-");
         return new Date(Number(year), Number(month) - 1, Number(day));
     }
 
-    function nodeContainsDescendant(rootNode, descendant) {
+    function nodeContainsDescendant(rootNode: any, descendant: { parentNode: any; }) {
         if (rootNode === descendant) {
             return true;
         }
@@ -98,19 +128,19 @@ export default function DateRangePicker(props) {
         }
         return false;
     }
-    function isNodeWithinPopover(node) {
+    function isNodeWithinPopover(node: { parentNode: any; }) {
         return datePickerRef?.current
             ? nodeContainsDescendant(datePickerRef.current, node)
             : false;
     }
-    function handleStartInputValueChange(value) {
-        setInputValues((prevState) => {
+    function handleStartInputValueChange(value: string) {
+        setInputValues((prevState: any) => {
             return { ...prevState, from: value };
         });
 
         if (isValidDate(value)) {
             const newSince = parseYearMonthDayDateString(value);
-            setDateRange((prevState) => {
+            setDateRange((prevState: any) => {
                 const newPeriod =
                     prevState.period && newSince <= prevState.period.to
                         ? { from: newSince, to: prevState.period.to }
@@ -122,11 +152,11 @@ export default function DateRangePicker(props) {
             });
         }
     }
-    function handleEndInputValueChange(value) {
-        setInputValues((prevState) => ({ ...prevState, to: value }));
+    function handleEndInputValueChange(value: string) {
+        setInputValues((prevState: any) => ({ ...prevState, to: value }));
         if (isValidDate(value)) {
             const newUntil = parseYearMonthDayDateString(value);
-            setDateRange((prevState) => {
+            setDateRange((prevState: any) => {
                 const newPeriod =
                     prevState.period && newUntil >= prevState.period.from
                         ? { from: prevState.period.from, to: newUntil }
@@ -138,7 +168,7 @@ export default function DateRangePicker(props) {
             });
         }
     }
-    function handleInputBlur({ relatedTarget }) {
+    function handleInputBlur({ relatedTarget }: any) {
         const isRelatedTargetWithinPopover =
             relatedTarget != null && isNodeWithinPopover(relatedTarget);
 
@@ -148,11 +178,11 @@ export default function DateRangePicker(props) {
         setPopoverActive(false);
     }
 
-    function handleMonthChange(month, year) {
+    function handleMonthChange(month: any, year: any) {
         setDate({ month, year });
     }
 
-    function handleCalendarChange({ start, end }) {
+    function handleCalendarChange({ start, end }: any) {
         const newDateRange = ranges.find((range) => {
             return (
                 range.period.from.valueOf() === start.valueOf() &&
@@ -211,16 +241,30 @@ export default function DateRangePicker(props) {
     let buttonValue = props.activeRange.title;
 
     if (props.activeRange.alias === 'custom') {
-        if (props.activeRange.from === props.activeRange.to) {
-            buttonValue = formatDateToString(dateRange.period.from);
+        if (props.activeRange.period.from === props.activeRange.period.to) {
+            buttonValue = formatDateToString(props.activeRange.period.from);
         } else {
-            buttonValue = formatDateToString(dateRange.period.from) + '–' + formatDateToString(dateRange.period.to);
+            let from = formatDateToString(props.activeRange.period.from);
+            const to = formatDateToString(props.activeRange.period.to);
+
+            if (from.split(',')[1] === to.split(',')[1]) {
+                from = from.split(',')[0];
+            }
+
+            buttonValue = from + '–' + to;
+        }
+
+        if (props.type === 'comparison') {
+            buttonValue = 'Compare: ' + buttonValue;
         }
     }
 
-    // buttonValue = dateRange.title === 'Custom'
-    //     ? new Date(dateRange.period.from).toDateString() + ' - ' + new Date(dateRange.period.to).toDateString()
-    //     : props.activeRange.title;
+    const datePickerSelected = dateRange.period.from && dateRange.period.to
+        ? {
+            start: new Date(dateRange.period.from),
+            end: new Date(dateRange.period.to),
+        }
+        : null;
 
     return (
         <Popover
@@ -244,16 +288,15 @@ export default function DateRangePicker(props) {
                 <Columns
                     columns={{
                         xs: "1fr",
-                        mdDown: "1fr",
                         md: "max-content max-content",
                     }}
-                    gap={0}
+                    gap='0'
                 >
                     <Box
                         maxWidth={mdDown ? "516px" : "212px"}
                         width={mdDown ? "100%" : "212px"}
-                        padding={{ xs: 5, md: 0 }}
-                        paddingBlockEnd={{ xs: 1, md: 0 }}
+                        padding={{ xs: '5', md: '0' }}
+                        paddingBlockEnd={{ xs: '1', md: '0' }}
                     >
                         {mdDown ? (
                             <Select
@@ -313,7 +356,7 @@ export default function DateRangePicker(props) {
                             </Scrollable>
                         )}
                     </Box>
-                    <Box padding={{ xs: 5 }} maxWidth={mdDown ? "320px" : "516px"}>
+                    <Box padding={{ xs: '5' }} maxWidth={mdDown ? "320px" : "516px"}>
                         <AlphaStack gap="4">
                             <Inline gap="2" blockAlign="center">
                                 <div style={{ flexGrow: 1 }}>
@@ -324,6 +367,7 @@ export default function DateRangePicker(props) {
                                         onBlur={handleInputBlur}
                                         autoComplete="off"
                                         placeholder='YYYY-MM-DD'
+                                        label=''
                                     />
                                 </div>
                                 <div className="WAzLI"><span className="Polaris-Icon_yj27d Polaris-Icon--colorSubdued_113xs Polaris-Icon--applyColor_2y25n"><span className="Polaris-Text--root_yj4ah Polaris-Text--visuallyHidden_yrtt6"></span><svg viewBox="0 0 20 20" className="Polaris-Icon__Svg_375hu" focusable="false" aria-hidden="true"><path d="m17.707 9.293-5-5a.999.999 0 1 0-1.414 1.414l3.293 3.293h-11.586a1 1 0 1 0 0 2h11.586l-3.293 3.293a.999.999 0 1 0 1.414 1.414l5-5a.999.999 0 0 0 0-1.414z"></path></svg></span></div>
@@ -335,18 +379,16 @@ export default function DateRangePicker(props) {
                                         onBlur={handleInputBlur}
                                         autoComplete="off"
                                         placeholder='YYYY-MM-DD'
+                                        label=''
                                     />
                                 </div>
                             </Inline>
                             <div>
                                 <DatePicker
-                                    weekStartsOn='1'
+                                    weekStartsOn={1}
                                     month={month}
                                     year={year}
-                                    selected={{
-                                        start: new Date(dateRange.period.from),
-                                        end: new Date(dateRange.period.to),
-                                    }}
+                                    selected={datePickerSelected}
                                     onMonthChange={handleMonthChange}
                                     onChange={handleCalendarChange}
                                     multiMonth={shouldShowMultiMonth}

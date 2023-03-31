@@ -103,7 +103,7 @@ export default function ConversionRateBlock({ data, isLoading }) {
         , 0);
     const convertedRate = (convSessionsSum / sessionsSum) * 100;
 
-    const total = convertedRate.toFixed(2);
+    const total = convertedRate ? convertedRate.toFixed(2) : 0;
     let totalDiff = null;
     const items = [
         {

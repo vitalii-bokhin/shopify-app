@@ -147,7 +147,7 @@ const comparativeRanges = [
 
 const quartersRanges = ['4th', '3rd', '2nd', '1st'].map((item, i) => {
     const lastYear = today.getFullYear() - 1;
-    let months = [];
+    let months: number[] = [];
 
     switch (i) {
         case 0:
@@ -215,7 +215,7 @@ const blackFridayRanges = [2022, 2021, 2020, 2019].map((year) => {
     };
 });
 
-const comparePrevPeriod = (date) => {
+const comparePrevPeriod = (date: DateRange) => {
     const dFrom = new Date(date.period.from);
     const dTo = new Date(date.period.to);
 
@@ -372,24 +372,24 @@ const comparePrevPeriod = (date) => {
     }
 
     if (date.alias.includes('Quarter')) {
-        const ind = date.alias[0];
+        const char = date.alias[0];
         const lastYear = dTo.getFullYear() - 1;
-        let months = [];
+        let months: number[] = [];
 
-        switch (ind - 1) {
-            case 4:
+        switch (char) {
+            case '4':
                 months = [9, 11];
                 break;
 
-            case 3:
+            case '3':
                 months = [6, 8];
                 break;
 
-            case 2:
+            case '2':
                 months = [3, 5];
                 break;
 
-            case 1:
+            case '1':
                 months = [0, 2];
                 break;
         }
@@ -419,7 +419,7 @@ const comparePrevPeriod = (date) => {
     }
 }
 
-const comparePrevYear = (date) => {
+const comparePrevYear = (date: DateRange) => {
     const dFrom = new Date(date.period.from);
     const dTo = new Date(date.period.to);
 
@@ -435,11 +435,11 @@ const comparePrevYear = (date) => {
 }
 
 export default function DatePickersContainerComponent() {
-    const activeMainRange = useSelector((state) => state.datepicker.mainRange);
-    const activeComparativeRange = useSelector((state) => state.datepicker.comparativeRange);
+    const activeMainRange: DateRange = useSelector<any, any>((state) => state.datepicker.mainRange);
+    const activeComparativeRange: DateRange = useSelector<any, any>((state) => state.datepicker.comparativeRange);
     const dispatch = useDispatch();
 
-    const setComparativeRange = (rangeState, mainRange) => {
+    const setComparison = (rangeState: DateRange, mainRange: DateRange) => {
         if (!mainRange) {
             mainRange = activeMainRange;
         }
@@ -456,7 +456,7 @@ export default function DatePickersContainerComponent() {
         dispatch(datepickerActions.setComparativeRange(range));
     }
 
-    const setMainRange = (rangeState) => {
+    const setRange = (rangeState: DateRange) => {
         const range = JSON.parse(JSON.stringify(rangeState));
 
         range.period.from = formatDateToYearMonthDayDateString(new Date(rangeState.period.from));
@@ -469,19 +469,27 @@ export default function DatePickersContainerComponent() {
 
             compRange.period = comparePrevPeriod(range);
 
-            setComparativeRange(compRange, range);
+            setComparison(compRange, range);
         }
     }
 
     comparativeRanges.forEach((range, i) => {
-        switch (range.alias) {
-            case 'previousPeriod':
-                comparativeRanges[i].period = comparePrevPeriod(activeMainRange);
-                break;
+        let period;
 
-            case 'previousYear':
-                comparativeRanges[i].period = comparePrevYear(activeMainRange);
-                break;
+        if (range.alias === 'previousPeriod') {
+            period = comparePrevPeriod(activeMainRange);
+        } else if (range.alias === 'previousYear') {
+            period = comparePrevYear(activeMainRange);
+        }
+
+        if (period) {
+            const formatPeriod = {
+                from: formatDateToYearMonthDayDateString(period.from),
+                to: formatDateToYearMonthDayDateString(period.to),
+                btnTitle: period.btnTitle,
+            };
+
+            comparativeRanges[i].period = formatPeriod;
         }
     });
 
@@ -493,7 +501,7 @@ export default function DatePickersContainerComponent() {
                     quartersRanges={quartersRanges}
                     blackFridayRanges={blackFridayRanges}
                     activeRange={activeMainRange}
-                    setActiveRange={setMainRange}
+                    setActiveRange={setRange}
                 />
             </div>
             <div className="WdJCM">
@@ -502,7 +510,7 @@ export default function DatePickersContainerComponent() {
                     quartersRanges={quartersRanges}
                     blackFridayRanges={blackFridayRanges}
                     activeRange={activeComparativeRange}
-                    setActiveRange={setComparativeRange}
+                    setActiveRange={setComparison}
                     type="comparison"
                 />
             </div>

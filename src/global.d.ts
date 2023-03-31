@@ -45,4 +45,14 @@ declare global {
             ordersCount: number;
         }[];
     };
+
+    type DateRange = {
+        alias: string;
+        title: string;
+        period: {
+            from: string;
+            to: string;
+            btnTitle?: string;
+        };
+    }
 }
