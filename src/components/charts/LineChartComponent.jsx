@@ -14,7 +14,13 @@ export default function LineChartComponent(props) {
         if (dateFrom == dateTo) {
             return formatDateToString(dateFrom);
         } else {
-            return formatDateToString(dateFrom) + '–' + formatDateToString(dateTo);
+            let opt;
+
+            if (new Date(dateFrom).getFullYear() == new Date(dateTo).getFullYear()) {
+                opt = { month: 'short', day: 'numeric' };
+            }
+
+            return formatDateToString(dateFrom, opt) + '–' + formatDateToString(dateTo);
         }
     }
 

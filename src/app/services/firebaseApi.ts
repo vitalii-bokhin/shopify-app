@@ -25,7 +25,10 @@ const firestoreQuery = () => async ({ endpoint, body }: QueryArgs) => {
             const docSnapshot = await getDoc(doc(db, 'users', String(currUserData.currentUserId)));
             const result: any = docSnapshot.data();
             return {
-                data: result,
+                data: {
+                    data: result,
+                    currUserData,
+                },
             };
 
         case 'settings':
@@ -73,7 +76,10 @@ export const userFirestoreApi = createApi({
         getData: builder.query<UserData, void>({
             query: (params) => ({ endpoint: 'userDates' }),
             transformResponse: (result) => {
-                result.dates = result.dates.map((item: IncomingDataItem) => {
+                result.data.dates = result.data.dates.map((item: IncomingDataItem) => {
+
+                    const sales = (item.totalOrders ?? 0) * (result.currUserData.minItemCost ?? 0);
+
                     return {
                         date: formatDateToYearMonthDayDateString(new Date(item.date)),
                         cart: item.addedToCart || 0,
@@ -81,7 +87,7 @@ export const userFirestoreApi = createApi({
                         converted_sessions: item.sessionConverted || 0,
                         orders: item.totalOrders || 0,
                         return_customer_rate: 0 || 0,
-                        sales: item.totalSalesPerDay || 0,
+                        sales,
                         sessions: item.sessions || 0,
                         visitors: item.visitors || 0,
                         first_time: 0 || 0,
@@ -89,7 +95,7 @@ export const userFirestoreApi = createApi({
                     };
                 });
 
-                return result;
+                return result.data;
             },
             providesTags: ['Users'],
         }),

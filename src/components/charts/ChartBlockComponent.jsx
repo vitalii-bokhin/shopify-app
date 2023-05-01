@@ -1,14 +1,56 @@
+import differenceInDays from 'src/app/features/differenceInDays';
 import Loader from '../Loader';
 import LineChartComponent from './LineChartComponent';
 import StackedChartComponent from './StackedChartComponent';
+import groupChartByMonth from 'src/app/features/groupChartByMonth';
 
 export default function ChartBlockComponent(props) {
     let total = props.total?.toLocaleString('en-US') ?? 0;
     let totalPrefix = props.totalPrefix;
+    let chartData = props.chartData ? [...props.chartData] : [];
+    let chartComparisonData = props.chartComparisonData ? [...props.chartComparisonData] : [];
+    let firstChartData = props.firstChartData ? [...props.firstChartData] : [];
+    let secondChartData = props.secondChartData ? [...props.secondChartData] : [];
 
     if (props.totalPrefix === '$') {
         totalPrefix = '';
         total = props.total?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) ?? '$0.00';
+    }
+
+    // transform data to month period
+    const diffPeriodInDays = differenceInDays(props.mainPeriod.from, props.mainPeriod.to);
+
+    if (diffPeriodInDays >= 98) { // if diff in 14 weeks
+        if (props.type === 'return_customer_rate') {
+            const firstChartDataGroup = groupChartByMonth(firstChartData);
+            firstChartData = [];
+
+            for (const valItem of firstChartDataGroup.values()) {
+                firstChartData.push(valItem);
+            }
+
+            const secondChartDataGroup = groupChartByMonth(secondChartData);
+            secondChartData = [];
+
+            for (const valItem of secondChartDataGroup.values()) {
+                secondChartData.push(valItem);
+            }
+
+        } else {
+            const dataGroup = groupChartByMonth(chartData);
+            chartData = [];
+
+            for (const valItem of dataGroup.values()) {
+                chartData.push(valItem);
+            }
+
+            const chartComparisonDataGroup = groupChartByMonth(chartComparisonData);
+            chartComparisonData = [];
+
+            for (const valItem of chartComparisonDataGroup.values()) {
+                chartComparisonData.push(valItem);
+            }
+        }
     }
 
     return props.isLoading ? <Loader /> : (
@@ -109,16 +151,16 @@ export default function ChartBlockComponent(props) {
             <div className="Polaris-LegacyStack__Item_yiyol">
                 {props.type === 'return_customer_rate' && (
                     <StackedChartComponent
-                        firstData={props.firstChartData}
-                        secondData={props.secondChartData}
+                        firstData={firstChartData}
+                        secondData={secondChartData}
                         prefix={props.chartPrefix}
                         period={props.mainPeriod}
                     />
                 )}
                 {props.type !== 'return_customer_rate' && (
                     <LineChartComponent
-                        data={props.chartData}
-                        compareData={props.chartComparisonData}
+                        data={chartData}
+                        compareData={chartComparisonData}
                         period={props.mainPeriod}
                         comparePeriod={props.comparisonPeriod}
                         prefix={props.chartPrefix}

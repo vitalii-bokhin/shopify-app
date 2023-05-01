@@ -393,6 +393,7 @@ export default function DateRangePicker(props: Props) {
                                     onChange={handleCalendarChange}
                                     multiMonth={shouldShowMultiMonth}
                                     allowRange
+                                    disableDatesAfter={new Date()}
                                 />
                             </div>
                         </AlphaStack>
