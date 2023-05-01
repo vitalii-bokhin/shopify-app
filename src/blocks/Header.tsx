@@ -30,10 +30,10 @@ export default function Header(props: { appLoading: any; userName: string; avata
                             <img alt="Shopify Editions" src={logo} className="HpTKZ xa0qG" />
                             <img alt="Shopify Editions" src={logo2} className="BCsv_" />
                         </div>
-                        <div className="Di55P lnOmq xa0qG"><a
+                        {/* <div className="Di55P lnOmq xa0qG"><a
                             href="https://www.shopify.com/editions/winter2023?utm_content=merchant&amp;utm_medium=badge&amp;utm_source=admin&amp;utm_campaign=editions_winter23"
                             target="_blank" rel="noopener noreferrer" data-polaris-unstyled="true"><span className="bBmk8">Winter
-                                ‘23</span></a></div>
+                                ‘23</span></a></div> */}
                     </div>
                 </div>
                 <div className="Polaris-TopBar__Contents_1u1wn">
