@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { initializeApp } from "firebase/app";
 import { collection, doc, getDoc, getDocs, getFirestore, updateDoc } from "firebase/firestore";
 import formatDateToYearMonthDayDateString from '../features/formatDateToYearMonthDayDateString';
+import randomInt from '../features/randomInt';
 
 const firebaseConfig = {
     apiKey: "AIzaSyD3-Dggsh_sBjubQhflKmmLv22MCNqyys4",
@@ -86,12 +87,12 @@ export const userFirestoreApi = createApi({
                         checkout: item.reachedCheckout || 0,
                         converted_sessions: item.sessionConverted || 0,
                         orders: item.totalOrders || 0,
-                        return_customer_rate: 0 || 0,
+                        return_customer_rate: randomInt(5, 95) || 0, // percentage
                         sales,
                         sessions: item.sessions || 0,
                         visitors: item.visitors || 0,
-                        first_time: 0 || 0,
-                        sales_to_market: 0 || 0,
+                        first_time: item.visitors - randomInt(10, item.visitors) || 0,
+                        sales_to_market: sales - randomInt(100, sales) || 0,
                     };
                 });
 
