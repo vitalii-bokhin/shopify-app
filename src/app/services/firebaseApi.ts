@@ -87,7 +87,7 @@ export const userFirestoreApi = createApi({
                         checkout: item.reachedCheckout || 0,
                         converted_sessions: item.sessionConverted || 0,
                         orders: item.totalOrders || 0,
-                        return_customer_rate: randomInt(5, 95) || 0, // percentage
+                        return_customer_rate: randomInt(1, 10) || 0, // percentage
                         sales,
                         sessions: item.sessions || 0,
                         visitors: item.visitors || 0,
