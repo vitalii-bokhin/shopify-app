@@ -5,7 +5,7 @@ import StackedChartComponent from './StackedChartComponent';
 import groupChartByMonth from 'src/app/features/groupChartByMonth';
 
 export default function ChartBlockComponent(props) {
-    let total = props.total?.toLocaleString('en-US') ?? 0;
+    let total = props.total === 0 ? 0 : props.total?.toLocaleString('en-US');
     let totalPrefix = props.totalPrefix;
     let chartData = props.chartData ? [...props.chartData] : [];
     let chartComparisonData = props.chartComparisonData ? [...props.chartComparisonData] : [];
@@ -14,7 +14,9 @@ export default function ChartBlockComponent(props) {
 
     if (props.totalPrefix === '$') {
         totalPrefix = '';
-        total = props.total?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) ?? '$0.00';
+        total = props.total
+            ? Number(props.total).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+            : '$0.00';
     }
 
     // transform data to month period
@@ -106,7 +108,7 @@ export default function ChartBlockComponent(props) {
                                 {props.totalTableDiff === 0 && (
                                     <td className="R6ls0 Ay5iz BLABy" colSpan="2">
                                         <div className="wqc8b">
-                                            <svg viewBox="0 0 29 16" height="16" width="29" role="img" className="_SVG_15ihc_1" tabindex="0">
+                                            <svg viewBox="0 0 29 16" height="16" width="29" role="img" className="_SVG_15ihc_1" tabIndex="0">
                                                 <title>No change</title>
                                                 <rect width="29" height="16" fill="#f6f6f7" rx="8"></rect>
                                                 <path d="M0.519531 1.79395H12.0039V0.249023H0.519531V1.79395Z" fill="#8c9196" transform="translate(8.5, 7)"></path>

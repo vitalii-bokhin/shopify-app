@@ -96,7 +96,7 @@ export default function ReturningCustomerBlock(props) {
     }
 
     let total = resultData.reduce((acc, item) => acc + item.return_customer_rate, 0);
-    let totalFormat = (total / resultData.length).toFixed(2) + '%';
+    let totalFormat = (total === 0 ? 0 : (total / resultData.length).toFixed(2)) + '%';
 
     let compareTotal = compareResultData.reduce((acc, item) => acc + item.return_customer_rate, 0);
     compareTotal = compareTotal / compareResultData.length;

@@ -482,7 +482,7 @@ export default function CohortBlock() {
                 </div>
             </div>
             <div class="POrjX">
-                <div><button aria-describedby="DefinitionPopoverContent1" type="button" class="krQ22" tabindex="0"
+                <div><button aria-describedby="DefinitionPopoverContent1" type="button" class="krQ22" tabIndex="0"
                         aria-controls="Polarispopover203" aria-owns="Polarispopover203" aria-expanded="false"><span
                             class="IQgNA"><span class="vrNiM">Last 6 months</span></span></button></div><span
                     class="QGb2g">September 2022 – February 2023</span>

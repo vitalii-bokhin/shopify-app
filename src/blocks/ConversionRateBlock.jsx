@@ -11,7 +11,7 @@ const TbRow = (props) => {
                         <p>{props.title}</p>
                         <p>
                             <span className="Polaris-Text--root_yj4ah Polaris-Text--bodyMd_jaf4s Polaris-Text--subdued_17vaa">
-                                {props.sessions} sessions
+                                {props.sessions ? props.sessions.toLocaleString('en-US') : 0} sessions
                             </span>
                         </p>
                     </div>
@@ -21,7 +21,7 @@ const TbRow = (props) => {
                 {props.rateDiff === 0 && (
                     <td className="R6ls0 Ay5iz BLABy" colSpan="2">
                         <div className="wqc8b"><svg viewBox="0 0 29 16" height="16" width="29" role="img"
-                            className="_SVG_15ihc_1" tabindex="0">
+                            className="_SVG_15ihc_1" tabIndex="0">
                             <title>No change</title>
                             <rect width="29" height="16" fill="#f6f6f7" rx="8"></rect>
                             <path d="M0.519531 1.79395H12.0039V0.249023H0.519531V1.79395Z"
@@ -156,7 +156,9 @@ export default function ConversionRateBlock({ data, isLoading }) {
                     <div className="Polaris-LegacyStack_eaeo0 Polaris-LegacyStack--alignmentCenter_1rtaw">
                         <div
                             className="Polaris-LegacyStack__Item_yiyol Polaris-LegacyStack__Item--fill_vpuzt">
-                            <p className="Polaris-Text--root_yj4ah Polaris-Text--headingXl_1dele">{total}%</p>
+                            <p className="Polaris-Text--root_yj4ah Polaris-Text--headingXl_1dele">
+                                {total ? Number(total).toLocaleString('en-US') : 0}%
+                            </p>
                         </div>
                         <div className="Polaris-LegacyStack__Item_yiyol">
                             {totalDiff === 0 && (

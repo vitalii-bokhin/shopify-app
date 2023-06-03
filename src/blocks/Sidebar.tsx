@@ -344,14 +344,14 @@ export default function Sidebar(props: { appLoading: boolean; ordersCount: numbe
                                 </path>
                               </svg></span></span></button></div>
                       <ul class="hFArt">
-                        <li class="DF2ig" role="button" tabindex="-1" aria-disabled="true" aria-roledescription="sortable"
+                        <li class="DF2ig" role="button" tabIndex="-1" aria-disabled="true" aria-roledescription="sortable"
                           aria-describedby="DndDescribedBy-0">
                           <ul class="PwNOf">
                             <li class="Polaris-Navigation__ListItem_wxd2m Polaris-Navigation__ListItem--hasAction_11n18">
                               <div class="Polaris-Navigation__ItemWrapper_1kbav">
                                 <div
                                   class="Polaris-Navigation__ItemInnerWrapper_1umqf Polaris-Navigation--itemInnerWrapperDisplayActionsOnHover_1oogy">
-                                  <a data-polaris-unstyled="true" class="Polaris-Navigation__Item_yiyol" tabindex="0"
+                                  <a data-polaris-unstyled="true" class="Polaris-Navigation__Item_yiyol" tabIndex="0"
                                     aria-disabled="false" aria-expanded="false" aria-controls="PolarisSecondaryNavigation25"
                                     href="/admin/themes?appLoadId=48929a4e-311a-48ba-94c7-f416d8704a97">
                                     <div class="Polaris-Navigation__Icon_yj27d Polaris-Navigation__Icon--resized_1snul"><span
@@ -365,7 +365,7 @@ export default function Sidebar(props: { appLoading: boolean; ordersCount: numbe
                                   </a><span class="Polaris-Navigation__SecondaryActions_n395k"><span class=""> <a
                                         href="https://payless.shopping/?_cd=47a477318e70ba11e52bb81f137aede6e50ac192567a74acbed17e572353b530&amp;_uid=74556997768&amp;preview_theme_id="
                                         target="_blank" rel="noopener noreferrer" data-polaris-unstyled="true"
-                                        class="Polaris-Navigation__SecondaryAction_1dl4i" tabindex="0" aria-disabled="false"
+                                        class="Polaris-Navigation__SecondaryAction_1dl4i" tabIndex="0" aria-disabled="false"
                                         aria-label="View your online store" aria-describedby="PolarisTooltipContent1"
                                         data-polaris-tooltip-activator="true"><span class="Polaris-Icon_yj27d"><span
                                             class="Polaris-Text--root_yj4ah Polaris-Text--visuallyHidden_yrtt6"></span><svg

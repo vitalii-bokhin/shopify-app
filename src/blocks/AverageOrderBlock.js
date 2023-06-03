@@ -77,8 +77,13 @@ export default function AverageOrderBlock({ data, isLoading }) {
     let totalDiff = null;
 
     if (isOneDay) {
-        total = resultData[0]?.sales / resultData[0]?.orders;
-        compareTotal = compareResultData[0]?.sales / compareResultData[0]?.orders;
+        if (resultData[0]?.sales && resultData[0]?.orders) {
+            total = resultData[0]?.sales / resultData[0]?.orders;
+        }
+
+        if (compareResultData[0]?.sales && compareResultData[0]?.orders) {
+            compareTotal = compareResultData[0]?.sales / compareResultData[0]?.orders;
+        }
     } else {
         total = resultData.reduce((acc, item) => acc + item.value, 0) / resultData.length;
         compareTotal = compareResultData.reduce((acc, item) => acc + item.value, 0) / compareResultData.length;
@@ -88,9 +93,11 @@ export default function AverageOrderBlock({ data, isLoading }) {
         totalDiff = (total - compareTotal) / (total / 100);
     }
 
+    total = total === 0 ? 0 : total.toFixed(2);
+
     const resProps = {
         isLoading: isLoading || dataFetching,
-        total: total.toFixed(2),
+        total,
         totalPrefix: '$',
         totalDiff: totalDiff,
         totalTableTitle: '',

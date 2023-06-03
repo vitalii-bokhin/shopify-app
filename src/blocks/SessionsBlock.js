@@ -84,8 +84,8 @@ export default function SessionsBlock({ data, isLoading }) {
     const titles = {};
 
     if (isOneDay) {
-        total = resultData[0]?.sessions;
-        compareTotal = compareResultData[0]?.sessions;
+        total = resultData[0]?.sessions ?? 0;
+        compareTotal = compareResultData[0]?.sessions ?? 0;
         totalTable = resultData[0]?.visitors;
         compareTotalTable = compareResultData[0]?.visitors;
     } else {

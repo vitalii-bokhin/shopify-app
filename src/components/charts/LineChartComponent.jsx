@@ -63,11 +63,7 @@ export default function LineChartComponent(props) {
 
     const tooltipOptions = {
         valueFormatter: (value) => {
-            if (prefix === '$') {
-                return prefix + value.toFixed(2)
-            } else {
-                return prefix + value;
-            }
+            return prefix + value.toLocaleString('en-US');
         },
     };
 

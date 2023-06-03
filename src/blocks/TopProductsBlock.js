@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import randomInt from '../app/features/randomInt';
+import getFilter from 'src/app/features/getFilter';
 import SimpleTableComponent from '../components/SimpleTableComponent';
 
-export default function TopProductsBlock() {
+export default function TopProductsBlock({ data, isLoading }) {
     const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
     const comparativePeriod = useSelector((state) => state.datepicker.comparativeRange.period);
-    const compAlias = useSelector((state) => state.datepicker.comparativeRange.alias);
     const [dataFetching, dataFetchingState] = useState(true);
 
     useEffect(() => {
@@ -16,20 +15,28 @@ export default function TopProductsBlock() {
         }, 2000);
     }, [mainPeriod, comparativePeriod]);
 
+    // filter
+    let { resultData, compareResultData } = getFilter({ data, mainPeriod, comparativePeriod, fieldToValue: 'orders' });
+
+    let total = 0;
+    let compareTotal = 0;
+    let totalDiff = null;
+
+    total = resultData.reduce((acc, item) => acc + item.orders, 0);
+    compareTotal = compareResultData.reduce((acc, item) => acc + item.orders, 0);
+
+    if (compareTotal && total) {
+        totalDiff = (total - compareTotal) / (total / 100);
+    }
+
     const items = [
         {
             id: 1,
             title: 'Micro Toner',
-            count: randomInt(50, 9999),
+            count: total,
+            diff: totalDiff,
         },
     ];
 
-    if (compAlias !== 'noComparison') {
-        items.forEach(item => {
-            const prev = randomInt(50, 9999);
-            item.diff = (item.count - prev) / (item.count / 100);
-        });
-    }
-
-    return <SimpleTableComponent items={items} isLoading={dataFetching} />;
+    return <SimpleTableComponent items={items} isLoading={dataFetching || isLoading} />;
 };

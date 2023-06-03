@@ -35,7 +35,7 @@ export default function StackedChartComponent(props) {
     };
 
     const tooltipOptions = {
-        valueFormatter: (value) => prefix + value.toFixed(0),
+        valueFormatter: (value) => prefix + Math.round(value).toLocaleString('en-US'),
     };
 
     return (

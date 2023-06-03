@@ -80,6 +80,8 @@ export const userFirestoreApi = createApi({
                 result.data.dates = result.data.dates.map((item: IncomingDataItem) => {
 
                     const sales = (item.totalOrders ?? 0) * (result.currUserData.minItemCost ?? 0);
+                    const first_time = item.visitors - randomInt(10, item.visitors);
+                    const sales_to_market = sales - randomInt(100, sales);
 
                     return {
                         date: formatDateToYearMonthDayDateString(new Date(item.date)),
@@ -91,8 +93,8 @@ export const userFirestoreApi = createApi({
                         sales,
                         sessions: item.sessions || 0,
                         visitors: item.visitors || 0,
-                        first_time: item.visitors - randomInt(10, item.visitors) || 0,
-                        sales_to_market: sales - randomInt(100, sales) || 0,
+                        first_time: first_time < 0 ? 0 : first_time,
+                        sales_to_market: sales_to_market < 0 ? 0 : sales_to_market,
                     };
                 });
 

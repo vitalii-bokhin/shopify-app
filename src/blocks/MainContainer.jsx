@@ -161,7 +161,10 @@ export default function MainContainer({ appLoading, isLoading, data }) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <SessionsByDeviceBlock />
+                                        <SessionsByDeviceBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -190,7 +193,10 @@ export default function MainContainer({ appLoading, isLoading, data }) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <SessionsBySocialBlock />
+                                        <SessionsBySocialBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -306,7 +312,10 @@ export default function MainContainer({ appLoading, isLoading, data }) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <TopProductsBlock />
+                                        <TopProductsBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -335,7 +344,10 @@ export default function MainContainer({ appLoading, isLoading, data }) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <SessionsByTrafficBlock />
+                                        <SessionsByTrafficBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -364,7 +376,10 @@ export default function MainContainer({ appLoading, isLoading, data }) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <SalesBySocialBlock />
+                                        <SalesBySocialBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -388,7 +403,10 @@ export default function MainContainer({ appLoading, isLoading, data }) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <TopReferrersBySessionsBlock />
+                                        <TopReferrersBySessionsBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -468,7 +486,10 @@ export default function MainContainer({ appLoading, isLoading, data }) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <SessionsByLocationBlock />
+                                        <SessionsByLocationBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -493,7 +514,10 @@ export default function MainContainer({ appLoading, isLoading, data }) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <SalesByTrafficSourceBlock />
+                                        <SalesByTrafficSourceBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -522,7 +546,10 @@ export default function MainContainer({ appLoading, isLoading, data }) {
                                         </div>
                                     </div>
                                     <div className="Polaris-LegacyStack__Item_yiyol">
-                                        <TopLandingsBySessionsBlock />
+                                        <TopLandingsBySessionsBlock
+                                            isLoading={isLoading}
+                                            data={data}
+                                        />
                                     </div>
                                 </div>
                             </div>

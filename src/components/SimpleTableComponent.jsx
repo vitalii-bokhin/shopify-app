@@ -17,7 +17,7 @@ export default function SimpleTableComponent(props) {
                             {item.diff === 0 && (
                                 <td className="R6ls0 Ay5iz BLABy" colSpan="2">
                                     <div className="wqc8b"><svg viewBox="0 0 29 16" height="16" width="29" role="img"
-                                        className="_SVG_15ihc_1" tabindex="0">
+                                        className="_SVG_15ihc_1" tabIndex="0">
                                         <title>No change</title>
                                         <rect width="29" height="16" fill="#f6f6f7" rx="8"></rect>
                                         <path d="M0.519531 1.79395H12.0039V0.249023H0.519531V1.79395Z"
