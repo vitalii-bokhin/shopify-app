@@ -50,6 +50,7 @@ const firestoreQuery = () => async ({ endpoint, body }: QueryArgs) => {
                 data: {
                     currentUserId: currentUserResult.currentUserId,
                     usersSettings: usersResult,
+                    countries: currentUserResult.countries,
                 },
             };
 
@@ -113,4 +114,4 @@ export const userFirestoreApi = createApi({
     }),
 });
 
-export const { useGetDataQuery, useLazyGetSettingsQuery, useUpdateSettingsMutation } = userFirestoreApi;
+export const { useGetDataQuery, useLazyGetSettingsQuery, useGetSettingsQuery, useUpdateSettingsMutation } = userFirestoreApi;

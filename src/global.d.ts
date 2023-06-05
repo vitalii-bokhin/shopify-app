@@ -44,6 +44,7 @@ declare global {
             id: number;
             ordersCount: number;
         }[];
+        countries?: string[];
     };
 
     type DateRange = {

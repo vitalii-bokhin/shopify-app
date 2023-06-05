@@ -1,33 +1,18 @@
+import { useGetSettingsQuery } from 'src/app/services/firebaseApi';
 import SessionsComponent from 'src/components/SessionsComponent';
 
 export default function SessionsByLocationBlock(props) {
-    
-    const items = [
-        {
-            id: 1,
-            title: 'United States',
-        },
-        {
-            id: 2,
-            title: 'Australia',
-        },
-        {
-            id: 3,
-            title: 'Canada',
-        },
-        {
-            id: 4,
-            title: 'United Kingdom',
-        },
-        {
-            id: 5,
-            title: 'New Zeland',
-        },
-        {
-            id: 6,
-            title: 'Czech Republic',
-        },
-    ];
+    const { data } = useGetSettingsQuery();
+    const items = [];
 
-    return <SessionsComponent items={items} {...props} />;
+    if (data && data.countries) {
+        data.countries.map((val, i) => {
+            items.push({
+                id: i + 1,
+                title: val,
+            });
+        });
+    }
+
+    return items.length ? <SessionsComponent items={items} {...props} /> : null;
 };
