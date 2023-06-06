@@ -51,6 +51,7 @@ const firestoreQuery = () => async ({ endpoint, body }: QueryArgs) => {
                     currentUserId: currentUserResult.currentUserId,
                     usersSettings: usersResult,
                     countries: currentUserResult.countries,
+                    products: currentUserResult.products,
                 },
             };
 

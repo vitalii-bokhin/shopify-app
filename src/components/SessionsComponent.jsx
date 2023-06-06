@@ -50,6 +50,8 @@ export default function SessionsComponent({ data, isLoading, items, renderTitle 
     items[items.length - 1].count = total - totReduced;
     items[items.length - 1].diff = totalDiff ? totalDiff - diffReduced : null;
 
+    items.sort((a, b) => b.count - a.count);
+
     return (
         <SimpleTableComponent
             items={items}
