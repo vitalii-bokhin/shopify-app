@@ -34,23 +34,25 @@ export default function SalesComponent({ data, isLoading, items, renderTitle, pr
     let totReduced = 0;
     let diffReduced = 0;
 
-    items.forEach((item, i) => {
-        const tot = randomInt(0, Math.abs(total / items.length));
-        const diff = randomInt(0, Math.abs(totalDiff / items.length));
+    if (items.length) {
+        items.forEach((item, i) => {
+            const tot = randomInt(0, Math.abs(total / items.length));
+            const diff = randomInt(0, Math.abs(totalDiff / items.length));
 
-        if (i + 1 < items.length) {
-            totReduced += tot;
-            diffReduced += diff;
-        }
+            if (i + 1 < items.length) {
+                totReduced += tot;
+                diffReduced += diff;
+            }
 
-        item.count = (total < 0 ? tot * -1 : tot);
-        item.diff = totalDiff ? (totalDiff < 0 ? diff * -1 : diff) : null;
-    });
+            item.count = (total < 0 ? tot * -1 : tot);
+            item.diff = totalDiff ? (totalDiff < 0 ? diff * -1 : diff) : null;
+        });
 
-    items[items.length - 1].count = total - totReduced;
-    items[items.length - 1].diff = totalDiff ? totalDiff - diffReduced : null;
+        items[items.length - 1].count = total - totReduced;
+        items[items.length - 1].diff = totalDiff ? totalDiff - diffReduced : null;
 
-    items.sort((a, b) => b.count - a.count);
+        items.sort((a, b) => b.count - a.count);
+    }
 
     return (
         <SimpleTableComponent

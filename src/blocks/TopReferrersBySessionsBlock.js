@@ -1,18 +1,19 @@
+import { useGetSettingsQuery } from 'src/app/services/firebaseApi';
 import SessionsComponent from 'src/components/SessionsComponent';
 
 
 export default function TopReferrersBySessionsBlock(props) {
-    
-    const items = [
-        {
-            id: 1,
-            title: 'baidu.com',
-        },
-        {
-            id: 2,
-            title: 'googleads.g.doubleclick.net',
-        },
-    ];
+    const { data } = useGetSettingsQuery();
+    const items = [];
+
+    if (data && data.referrers) {
+        data.referrers.map((val, i) => {
+            items.push({
+                id: i + 1,
+                title: val,
+            });
+        });
+    }
 
     return (
         <SessionsComponent
