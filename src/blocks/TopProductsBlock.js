@@ -46,11 +46,13 @@ export default function TopProductsBlock({ data, isLoading }) {
     let diffReduced = 0;
 
     if (items.length) {
-        items.forEach((item, i) => {
-            const tot = randomInt(0, Math.abs(total / items.length));
-            const diff = randomInt(0, Math.abs(totalDiff / items.length));
+        const cloned = JSON.parse(JSON.stringify(items));
 
-            if (i + 1 < items.length) {
+        cloned.forEach((item, i) => {
+            const tot = randomInt(0, Math.abs(total / cloned.length));
+            const diff = randomInt(0, Math.abs(totalDiff / cloned.length));
+
+            if (i + 1 < cloned.length) {
                 totReduced += tot;
                 diffReduced += diff;
             }
@@ -59,10 +61,15 @@ export default function TopProductsBlock({ data, isLoading }) {
             item.diff = totalDiff ? (totalDiff < 0 ? diff * -1 : diff) : null;
         });
 
-        items[items.length - 1].count = total - totReduced;
-        items[items.length - 1].diff = totalDiff ? totalDiff - diffReduced : null;
+        cloned[cloned.length - 1].count = total - totReduced;
+        cloned[cloned.length - 1].diff = totalDiff ? totalDiff - diffReduced : null;
 
-        items.sort((a, b) => b.count - a.count);
+        cloned.sort((a, b) => b.count - a.count);
+
+        items.forEach((item, i) => {
+            item.count = cloned[i].count;
+            item.diff = cloned[i].diff;
+        });
     }
 
     return <SimpleTableComponent items={items} isLoading={dataFetching || isLoading} />;
