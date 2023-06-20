@@ -1,0 +1,47 @@
+.Polaris-Frame__Content_xd1mk {
+  position: static !important;
+}
+
+.badge {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: #f6f6f7;
+  border-radius: 12px;
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px 0 5px;
+}
+
+.badge_sm {
+  font-size: 12px;
+  height: 16px;
+  border-radius: 8px;
+  padding: 0 8px 0 4px;
+  gap: 4px;
+}
+
+table {
+  font-size: inherit;
+}
+
+.Polaris-Frame__Content_xd1mk {
+  padding-bottom: 0 !important;
+}
+
+.Polaris-Navigation__ItemInnerWrapper_1umqf>div {
+  width: 100%;
+}
+
+.formGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.formGrid__item {
+  flex: 0 1 calc(50% - .5rem);
+  max-width: calc(50% - .5rem);
+}
