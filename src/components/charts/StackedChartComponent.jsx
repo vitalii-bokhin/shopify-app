@@ -31,7 +31,19 @@ export default function StackedChartComponent(props) {
     };
 
     const yAxisOptions = {
-        labelFormatter: (value) => prefix + value.toFixed(0),
+        labelFormatter: (value) => {
+            if (prefix) {
+                return prefix + value.toFixed(0);
+            } else {
+                if (value == 0) {
+                    return '0';
+                } else if (value >= 1000) {
+                    return (value / 1000) + 'K';
+                } else {
+                    return value.toFixed(0);
+                }
+            }
+        },
     };
 
     const tooltipOptions = {

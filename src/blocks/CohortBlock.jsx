@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import randomInt from '../app/features/randomInt';
 import ContentLoader from '../components/ContentLoader';
+import formatDateToString from 'src/app/features/formatDateToString';
 
 export default function CohortBlock() {
     const mainPeriod = useSelector((state) => state.datepicker.mainRange.period);
@@ -16,13 +17,13 @@ export default function CohortBlock() {
     }, [mainPeriod, comparativePeriod]);
 
     const data = {};
-    data.all = ['100', randomInt(0, 100), randomInt(0, 100)];
-    data.sep = ['100', randomInt(0, 100), randomInt(0, 100)];
-    data.oct = ['100', randomInt(0, 100), randomInt(0, 100)];
-    data.nov = ['100', randomInt(0, 100), randomInt(0, 100)];
-    data.dec = ['100', randomInt(0, 100), randomInt(0, 100)];
-    data.jan = ['100', randomInt(0, 100), randomInt(0, 100)];
-    data.feb = ['100', randomInt(0, 100), randomInt(0, 100)];
+    data.all = ['100', randomInt(0, 100), randomInt(0, 100), ''];
+    data.sep = ['100', randomInt(0, 100), randomInt(0, 100), ''];
+    data.oct = ['100', randomInt(0, 100), randomInt(0, 100), ''];
+    data.nov = ['100', randomInt(0, 100), randomInt(0, 100), ''];
+    data.dec = ['100', randomInt(0, 100), randomInt(0, 100), ''];
+    data.jan = ['100', randomInt(0, 100), randomInt(0, 100), ''];
+    data.feb = ['100', randomInt(0, 100), randomInt(0, 100), ''];
 
     for (const key in data) {
         if (Object.hasOwnProperty.call(data, key)) {
@@ -31,9 +32,18 @@ export default function CohortBlock() {
         }
     }
 
+    // add months to items
+    const keys = ['sep', 'oct', 'nov', 'dec', 'jan', 'feb'];
+    keys.reverse();
+    keys.forEach((k, i) => {
+        const d = new Date();
+        d.setMonth(d.getMonth() - (i + 1));
+        data[k][3] = formatDateToString(d, { year: 'numeric', month: 'short' });
+    });
+
     const { all, sep, oct, nov, dec, jan, feb } = data;
 
-    return dataFetching ? <ContentLoader /> :  (
+    return dataFetching ? <ContentLoader /> : (
         <div dangerouslySetInnerHTML={{
             __html: `<div class="Polaris-AlphaStack_1x5dy"
             style="--pc-stack-inline-align:start; --pc-stack-order:column; --pc-stack-gap-xs:var(--p-space-4);">
@@ -66,48 +76,42 @@ export default function CohortBlock() {
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV DoWM7 gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Sep
-                                                    2022</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${sep[3]}</span></div>
                                         </th>
                                     </tr>
                                     <tr class="Polaris-DataTable__TableRow_1a85o">
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Oct
-                                                    2022</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${oct[3]}</span></div>
                                         </th>
                                     </tr>
                                     <tr class="Polaris-DataTable__TableRow_1a85o">
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Nov
-                                                    2022</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${nov[3]}</span></div>
                                         </th>
                                     </tr>
                                     <tr class="Polaris-DataTable__TableRow_1a85o">
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Dec
-                                                    2022</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${dec[3]}</span></div>
                                         </th>
                                     </tr>
                                     <tr class="Polaris-DataTable__TableRow_1a85o">
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Jan
-                                                    2023</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${jan[3]}</span></div>
                                         </th>
                                     </tr>
                                     <tr class="Polaris-DataTable__TableRow_1a85o">
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Feb
-                                                    2023</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${feb[3]}</span></div>
                                         </th>
                                     </tr>
                                 </tbody>
@@ -215,8 +219,7 @@ export default function CohortBlock() {
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV DoWM7 gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Sep
-                                                    2022</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${sep[3]}</span></div>
                                         </th>
                                         <td
                                             class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--numeric_1ld9f">
@@ -259,8 +262,7 @@ export default function CohortBlock() {
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Oct
-                                                    2022</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${oct[3]}</span></div>
                                         </th>
                                         <td
                                             class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--numeric_1ld9f">
@@ -303,8 +305,7 @@ export default function CohortBlock() {
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Nov
-                                                    2022</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${nov[3]}</span></div>
                                         </th>
                                         <td
                                             class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--numeric_1ld9f">
@@ -347,8 +348,7 @@ export default function CohortBlock() {
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Dec
-                                                    2022</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${dec[3]}</span></div>
                                         </th>
                                         <td
                                             class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--numeric_1ld9f">
@@ -391,8 +391,7 @@ export default function CohortBlock() {
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Jan
-                                                    2023</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${jan[3]}</span></div>
                                         </th>
                                         <td
                                             class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--numeric_1ld9f">
@@ -435,8 +434,7 @@ export default function CohortBlock() {
                                         <th class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--firstColumn_2o4gk"
                                             scope="row">
                                             <div class="i3PKV gZCaa" style="height: 25.7143px;"><span
-                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">Feb
-                                                    2023</span></div>
+                                                    class="Polaris-Text--root_yj4ah Polaris-Text--headingXs_9lann Polaris-Text--regular_pjgr0">${feb[3]}</span></div>
                                         </th>
                                         <td
                                             class="Polaris-DataTable__Cell_yixs7 Polaris-DataTable__Cell--verticalAlignTop_1042b Polaris-DataTable__Cell--numeric_1ld9f">
